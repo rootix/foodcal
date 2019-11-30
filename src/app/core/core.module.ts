@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ShellComponent } from './shell/shell.component';
 import { RouterModule } from '@angular/router';
-import { ClarityModule } from '@clr/angular';
+
+import { SharedModule } from '../shared/shared.module';
+import { ShellComponent } from './shell/shell.component';
 
 @NgModule({
-    imports: [CommonModule, RouterModule, ClarityModule],
+    imports: [SharedModule, RouterModule],
     declarations: [ShellComponent],
     exports: [ShellComponent]
 })

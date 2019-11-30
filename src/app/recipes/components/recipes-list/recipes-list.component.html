@@ -1,0 +1,30 @@
+<clr-datagrid>
+    <clr-dg-action-bar>
+        <button type="button" class="btn btn-sm btn-secondary" (click)="addRecipe.emit()">
+            <clr-icon shape="plus"></clr-icon> Neues Rezept
+        </button>
+    </clr-dg-action-bar>
+    <clr-dg-column>Rezept</clr-dg-column>
+    <clr-dg-column>URL</clr-dg-column>
+    <clr-dg-column>Letzte Zubereitung</clr-dg-column>
+    <clr-dg-column class="action-column"></clr-dg-column>
+
+    <clr-dg-row *ngFor="let recipe of recipes">
+        <clr-dg-cell>{{ recipe.name }}</clr-dg-cell>
+        <clr-dg-cell
+            ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></clr-dg-cell
+        >
+        <clr-dg-cell>{{ recipe.lastPreparation | date }}</clr-dg-cell>
+
+        <clr-dg-cell class="action-cell">
+            <button class="btn btn-icon btn-link btn-sm" (click)="editRecipe.emit($event)">
+                <clr-icon shape="pencil"></clr-icon>
+            </button>
+            <button class="btn btn-icon btn-link btn-sm" (click)="deleteRecipe.emit($event)">
+                <clr-icon shape="trash" class="is-error"></clr-icon>
+            </button>
+        </clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-footer>{{ recipes.length }} Rezepte</clr-dg-footer>
+</clr-datagrid>
