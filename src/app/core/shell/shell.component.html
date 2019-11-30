@@ -1,0 +1,18 @@
+<clr-main-container>
+    <clr-header class="header-6">
+        <div class="branding">
+            <a [routerLink]="'/'">
+                <span class="title"><strong>Food</strong>cal</span>
+            </a>
+        </div>
+        <div class="header-nav">
+            <a class="nav-link"><span class="nav-text">Wochenplan</span></a>
+            <a class="nav-link"><span class="nav-text">Rezepte</span></a>
+        </div>
+    </clr-header>
+    <div class="content-container">
+        <div class="content-area">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</clr-main-container>
