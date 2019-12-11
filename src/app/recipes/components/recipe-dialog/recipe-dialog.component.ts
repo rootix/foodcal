@@ -1,6 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ClrForm } from '@clr/angular';
+import { ClrForm, ClrLoadingState } from '@clr/angular';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 import { Recipe } from '../../models/recipes.model';
 
@@ -8,27 +10,28 @@ import { Recipe } from '../../models/recipes.model';
     selector: 'fc-recipe-dialog',
     templateUrl: './recipe-dialog.component.html'
 })
-export class RecipeDialogComponent implements OnInit {
+export class RecipeDialogComponent {
     @ViewChild(ClrForm) clarityForm: ClrForm;
 
     isOpen = false;
     isNew = false;
 
     readonly form = new FormGroup({
+        id: new FormControl(0, Validators.required),
         name: new FormControl(null, Validators.required),
         url: new FormControl(),
         note: new FormControl()
     });
 
-    constructor() {}
+    submitState: ClrLoadingState;
+    private submitHandler: (recipe: Recipe) => Observable<void>;
 
-    ngOnInit() {}
-
-    open(recipe?: Recipe) {
+    open(recipe: Recipe, submitHandler: (recipe: Recipe) => Observable<void>) {
         this.form.reset();
-        this.isNew = !recipe;
+        this.isNew = recipe.id === undefined;
+        this.submitHandler = submitHandler;
 
-        if (recipe) {
+        if (!this.isNew) {
             this.form.patchValue(recipe);
         }
 
@@ -39,5 +42,12 @@ export class RecipeDialogComponent implements OnInit {
         if (this.form.invalid) {
             this.clarityForm.markAsTouched();
         }
+
+        this.submitState = ClrLoadingState.LOADING;
+        this.submitHandler({ ...this.form.value })
+            .pipe(finalize(() => (this.submitState = ClrLoadingState.DEFAULT)))
+            .subscribe(_ => {
+                this.isOpen = false;
+            });
     }
 }

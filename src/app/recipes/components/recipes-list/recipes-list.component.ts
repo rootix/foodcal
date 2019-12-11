@@ -12,4 +12,8 @@ export class RecipesListComponent {
     @Output() addRecipe = new EventEmitter();
     @Output() editRecipe = new EventEmitter<Recipe>();
     @Output() deleteRecipe = new EventEmitter<Recipe>();
+
+    trackById(index: number, item: Recipe) {
+        return item && item.id;
+    }
 }

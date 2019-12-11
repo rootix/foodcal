@@ -9,7 +9,7 @@
     <clr-dg-column [clrDgSortBy]="'lastPreparation'">Letzte Zubereitung</clr-dg-column>
     <clr-dg-column class="action-column"></clr-dg-column>
 
-    <clr-dg-row *clrDgItems="let recipe of recipes">
+    <clr-dg-row *clrDgItems="let recipe of recipes; trackBy: trackById">
         <clr-dg-cell>{{ recipe.name }}</clr-dg-cell>
         <clr-dg-cell
             ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></clr-dg-cell
@@ -24,9 +24,11 @@
                 <clr-icon shape="trash" class="is-error"></clr-icon>
             </button>
         </clr-dg-cell>
-        <clr-dg-row-detail *clrIfExpanded>
-            {{ recipe.note }}
-        </clr-dg-row-detail>
+        <ng-container ngProjectAs="clr-dg-row-detail" *ngIf="recipe.note">
+            <clr-dg-row-detail *clrIfExpanded>
+                {{ recipe.note }}
+            </clr-dg-row-detail>
+        </ng-container>
     </clr-dg-row>
 
     <clr-dg-footer>

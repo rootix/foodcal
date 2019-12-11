@@ -1,2 +1,7 @@
-<fc-recipes-list [recipes]="recipes" (addRecipe)="onAddRecipe()" (editRecipe)="onEditRecipe($event)"></fc-recipes-list>
+<fc-recipes-list
+    [recipes]="recipes$ | async"
+    (addRecipe)="onAddRecipe()"
+    (editRecipe)="onEditRecipe($event)"
+    (deleteRecipe)="onDeleteRecipe($event)"
+></fc-recipes-list>
 <fc-recipe-dialog></fc-recipe-dialog>

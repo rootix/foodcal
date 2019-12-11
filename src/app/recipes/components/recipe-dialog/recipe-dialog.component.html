@@ -19,7 +19,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline" (click)="isOpen = false">Abbrechen</button>
-        <button type="button" class="btn btn-primary" (click)="onSubmit()">
+        <button type="button" class="btn btn-primary" (click)="onSubmit()" [clrLoading]="submitState">
             {{ isNew ? 'Erstellen' : 'Aktualisieren' }}
         </button>
     </div>
