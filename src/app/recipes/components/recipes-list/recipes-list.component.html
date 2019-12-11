@@ -4,12 +4,12 @@
             <clr-icon shape="plus"></clr-icon> Neues Rezept
         </button>
     </clr-dg-action-bar>
-    <clr-dg-column>Rezept</clr-dg-column>
+    <clr-dg-column [clrDgField]="'name'">Rezept</clr-dg-column>
     <clr-dg-column>URL</clr-dg-column>
-    <clr-dg-column>Letzte Zubereitung</clr-dg-column>
+    <clr-dg-column [clrDgSortBy]="'lastPreparation'">Letzte Zubereitung</clr-dg-column>
     <clr-dg-column class="action-column"></clr-dg-column>
 
-    <clr-dg-row *ngFor="let recipe of recipes">
+    <clr-dg-row *clrDgItems="let recipe of recipes; trackBy: trackById">
         <clr-dg-cell>{{ recipe.name }}</clr-dg-cell>
         <clr-dg-cell
             ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></clr-dg-cell
@@ -17,14 +17,24 @@
         <clr-dg-cell>{{ recipe.lastPreparation | date }}</clr-dg-cell>
 
         <clr-dg-cell class="action-cell">
-            <button class="btn btn-icon btn-link btn-sm" (click)="editRecipe.emit($event)">
+            <button class="btn btn-icon btn-link btn-sm" (click)="editRecipe.emit(recipe)">
                 <clr-icon shape="pencil"></clr-icon>
             </button>
-            <button class="btn btn-icon btn-link btn-sm" (click)="deleteRecipe.emit($event)">
+            <button class="btn btn-icon btn-link btn-sm" (click)="deleteRecipe.emit(recipe)">
                 <clr-icon shape="trash" class="is-error"></clr-icon>
             </button>
         </clr-dg-cell>
+        <ng-container ngProjectAs="clr-dg-row-detail" *ngIf="recipe.note">
+            <clr-dg-row-detail *clrIfExpanded>
+                {{ recipe.note }}
+            </clr-dg-row-detail>
+        </ng-container>
     </clr-dg-row>
 
-    <clr-dg-footer>{{ recipes.length }} Rezepte</clr-dg-footer>
+    <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+            <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Rezepte pro Seite</clr-dg-page-size>
+            {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} von {{ pagination.totalItems }} Rezepten
+        </clr-dg-pagination></clr-dg-footer
+    >
 </clr-datagrid>

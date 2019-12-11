@@ -8,11 +8,12 @@ import { Recipe } from '../../models/recipes.model';
     styleUrls: ['./recipes-list.component.scss']
 })
 export class RecipesListComponent {
-    @Input() recipes: Recipe[] = [
-        { name: 'Erstes Rezept', lastPreparation: new Date() },
-        { name: 'Zweites Rezept', url: 'https://www.bettybossi.ch' }
-    ];
+    @Input() recipes: Recipe[];
     @Output() addRecipe = new EventEmitter();
     @Output() editRecipe = new EventEmitter<Recipe>();
     @Output() deleteRecipe = new EventEmitter<Recipe>();
+
+    trackById(index: number, item: Recipe) {
+        return item && item.id;
+    }
 }
