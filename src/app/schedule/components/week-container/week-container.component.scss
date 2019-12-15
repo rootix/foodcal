@@ -1,0 +1,11 @@
+.week-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@media (max-width: 1800px) {
+    .week-container {
+        flex-direction: column;
+    }
+}

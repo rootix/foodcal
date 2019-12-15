@@ -6,10 +6,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from '@clr/angular';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 import { CoreModule } from './core/core.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 registerLocaleData(localeDeCh, 'de-CH');
 
@@ -21,7 +23,8 @@ registerLocaleData(localeDeCh, 'de-CH');
         ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
-        NgxsModule.forRoot([]),
+        ScheduleModule,
+        NgxsModule.forRoot([], { developmentMode: !environment.production }),
         NgxsReduxDevtoolsPluginModule.forRoot()
     ],
     bootstrap: [AppComponent],

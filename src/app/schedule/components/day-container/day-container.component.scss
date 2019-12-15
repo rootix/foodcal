@@ -1,0 +1,29 @@
+.day-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.meal-wrapper {
+    flex: 1 1 auto;
+    min-width: 12rem;
+}
+
+.day-name {
+    font-weight: bold;
+}
+
+@media (max-width: 1800px) {
+    .day-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .day-name {
+        width: 8rem;
+        margin-top: 1rem;
+    }
+
+    .meal-wrapper {
+        margin: 0 0.5rem;
+    }
+}
