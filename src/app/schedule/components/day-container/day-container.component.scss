@@ -27,3 +27,14 @@
         margin: 0 0.5rem;
     }
 }
+
+@media (max-width: 500px) {
+    .day-container {
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+
+    .day-name {
+        margin-left: 0rem;
+    }
+}
