@@ -5,12 +5,13 @@ import { delay, switchMap } from 'rxjs/operators';
 
 import { RECIPE_MOCKS } from './models/recipes.mock';
 import { Recipe } from './models/recipes.model';
-import { AddRecipe, DeleteRecipe, EnsureLoadAllRecipes, UpdateRecipe } from './state/recipe.actions';
+import { AddRecipe, DeleteRecipe, EnsureLoadAllRecipes, RecipeLoading, UpdateRecipe } from './state/recipe.actions';
 import { RecipeState } from './state/recipe.state';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
     @Select(RecipeState.getAllRecipes) public recipes$: Observable<Recipe[]>;
+    @Select(RecipeState.loading) public loading$: Observable<Recipe[]>;
 
     constructor(private store: Store) {}
 
@@ -29,10 +30,19 @@ export class RecipeService {
     }
 
     public deleteRecipe(recipe: Recipe) {
-        return this.store.dispatch(new DeleteRecipe(recipe.id));
+        return of(true).pipe(
+            delay(1000),
+            switchMap(_ => this.store.dispatch(new DeleteRecipe(recipe.id)))
+        );
     }
 
     public ensureLoadRecipes() {
-        return this.store.dispatch(new EnsureLoadAllRecipes(RECIPE_MOCKS));
+        this.store.dispatch(new RecipeLoading());
+        of(true)
+            .pipe(
+                delay(1000),
+                switchMap(_ => this.store.dispatch(new EnsureLoadAllRecipes(RECIPE_MOCKS)))
+            )
+            .subscribe();
     }
 }

@@ -1,6 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { of } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
 import { DialogService } from 'src/app/shared/dialog/dialog.service';
 
 import { RecipeDialogComponent } from '../../components/recipe-dialog/recipe-dialog.component';
@@ -15,6 +13,7 @@ export class RecipesViewComponent implements OnInit {
     @ViewChild(RecipeDialogComponent) dialog: RecipeDialogComponent;
 
     recipes$ = this.recipeService.recipes$;
+    loading$ = this.recipeService.loading$;
 
     constructor(private recipeService: RecipeService, private dialogService: DialogService) {}
 
@@ -35,11 +34,7 @@ export class RecipesViewComponent implements OnInit {
             .confirm(
                 'Bestätigen',
                 'Soll das Rezept wirklich gelöscht werden?',
-                () =>
-                    of(true).pipe(
-                        delay(1000),
-                        tap(_ => this.recipeService.deleteRecipe(recipe))
-                    ),
+                () => this.recipeService.deleteRecipe(recipe),
                 'Löschen',
                 'btn-danger'
             )

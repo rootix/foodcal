@@ -1,5 +1,6 @@
 <h1>Rezepte</h1>
 <fc-recipes-list
+    [loading]="loading$ | async"
     [recipes]="recipes$ | async"
     (addRecipe)="onAddRecipe()"
     (editRecipe)="onEditRecipe($event)"
