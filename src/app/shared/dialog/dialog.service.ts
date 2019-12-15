@@ -2,7 +2,7 @@ import { ComponentPortal, DomPortalOutlet, PortalInjector } from '@angular/cdk/p
 import { DOCUMENT } from '@angular/common';
 import { ApplicationRef, ComponentFactoryResolver, Inject, Injectable, Injector } from '@angular/core';
 import { from, merge, Observable, ObservableInput, of } from 'rxjs';
-import { catchError, finalize, mapTo, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, finalize, mapTo, mergeAll, switchMap, take, tap } from 'rxjs/operators';
 
 import {
     CONFIRM_DIALOG_OPTIONS,
@@ -45,7 +45,7 @@ export class DialogService {
 
         return new Observable<boolean>(observer => {
             const dialogRef = portalHost.attach(portal);
-            return merge(
+            return merge([
                 dialogRef.instance.cancel.pipe(mapTo(false)),
                 dialogRef.instance.confirm.pipe(
                     switchMap((_: boolean) => {
@@ -56,8 +56,9 @@ export class DialogService {
                         );
                     })
                 )
-            )
+            ])
                 .pipe(
+                    mergeAll(),
                     take(1),
                     tap(confirmed => {
                         portalHost.detach();
