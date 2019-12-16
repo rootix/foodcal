@@ -1,11 +1,11 @@
-.week-container {
+:host {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
 @media (max-width: 1800px) {
-    .week-container {
+    :host {
         flex-direction: column;
     }
 }
