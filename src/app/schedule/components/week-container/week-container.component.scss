@@ -1,11 +1,5 @@
 :host {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-}
-
-@media (max-width: 1800px) {
-    :host {
-        flex-direction: column;
-    }
 }
