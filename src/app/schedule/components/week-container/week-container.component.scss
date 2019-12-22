@@ -2,4 +2,17 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
+
+    &.loading fc-day-container {
+        filter: blur(5px);
+    }
+}
+
+.loading-indicator {
+    position: absolute;
+    left: calc(50% - 1.5rem);
+    top: 5rem;
+    z-index: 1;
+    filter: blur(0);
 }

@@ -27,6 +27,7 @@
     "@ngxs/devtools-plugin": "^3.5.1",
     "@ngxs/store": "^3.5.1",
     "@webcomponents/custom-elements": "^1.0.0",
+    "date-fns": "^2.8.1",
     "lit-element": "^2.2.1",
     "ramda": "^0.26.1",
     "rxjs": "~6.5.3",

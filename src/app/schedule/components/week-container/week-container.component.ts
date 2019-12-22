@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
+
+import { MealsPerDay } from '../../models/schedule.model';
 
 @Component({
     selector: 'fc-week-container',
-    template: `
-        <ng-content></ng-content>
-    `,
+    templateUrl: './week-container.component.html',
     styleUrls: ['./week-container.component.scss']
 })
-export class WeekContainerComponent {}
+export class WeekContainerComponent {
+    @Input() mealsOfWeek: MealsPerDay[];
+    @HostBinding('class.loading') @Input() loading: boolean;
+}

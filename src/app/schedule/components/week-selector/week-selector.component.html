@@ -1,4 +1,8 @@
-<button class="btn btn-icon btn-sm btn-link"><clr-icon shape="angle" dir="left"></clr-icon></button>
-<strong>KW 50</strong>
-(16.12.2019 - 23.12.2019)
-<button class="btn btn-icon btn-sm btn-link"><clr-icon shape="angle" dir="right"></clr-icon></button>
+<button class="btn btn-icon btn-sm btn-link" (click)="switchToPreviousWeek.emit()">
+    <clr-icon shape="angle" dir="left"></clr-icon>
+</button>
+<strong>KW {{ week.calendarWeek }}</strong>
+({{ week.startDate | date }} - {{ week.endDate | date }})
+<button class="btn btn-icon btn-sm btn-link" (click)="switchToNextWeek.emit()">
+    <clr-icon shape="angle" dir="right"></clr-icon>
+</button>

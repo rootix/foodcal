@@ -1,13 +1,9 @@
 <h1>Wochenplan</h1>
 
-<fc-week-selector></fc-week-selector>
+<fc-week-selector
+    [week]="week$ | async"
+    (switchToNextWeek)="onSwitchToNextWeek()"
+    (switchToPreviousWeek)="onSwitchToPreviousWeek()"
+></fc-week-selector>
 
-<fc-week-container>
-    <fc-day-container></fc-day-container>
-    <fc-day-container></fc-day-container>
-    <fc-day-container></fc-day-container>
-    <fc-day-container></fc-day-container>
-    <fc-day-container></fc-day-container>
-    <fc-day-container></fc-day-container>
-    <fc-day-container></fc-day-container>
-</fc-week-container>
+<fc-week-container [mealsOfWeek]="mealsOfWeek$ | async" [loading]="loading$ | async"> </fc-week-container>

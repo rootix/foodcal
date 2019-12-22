@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'fc-day-container',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./day-container.component.scss']
 })
 export class DayContainerComponent implements OnInit {
+    @Input() date: Date;
+
     constructor() {}
 
     ngOnInit() {}

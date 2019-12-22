@@ -23,8 +23,8 @@ registerLocaleData(localeDeCh, 'de-CH');
         ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
-        ScheduleModule,
         NgxsModule.forRoot([], { developmentMode: !environment.production }),
+        ScheduleModule,
         NgxsReduxDevtoolsPluginModule.forRoot()
     ],
     bootstrap: [AppComponent],

@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { Week } from '../../models/schedule.model';
 
 @Component({
     selector: 'fc-week-selector',
-    templateUrl: './week-selector.component.html'
+    templateUrl: './week-selector.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WeekSelectorComponent implements OnInit {
-    constructor() {}
-
-    ngOnInit() {}
+export class WeekSelectorComponent {
+    @Input() week: Week;
+    @Output() switchToNextWeek = new EventEmitter();
+    @Output() switchToPreviousWeek = new EventEmitter();
 }
