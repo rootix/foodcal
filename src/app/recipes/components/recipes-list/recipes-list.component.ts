@@ -2,8 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewC
 import { ClrDatagrid } from '@clr/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { Recipe } from '../../models/recipes.model';
+import { Recipe } from 'src/app/shared/models';
 
 @Component({
     selector: 'fc-recipes-list',

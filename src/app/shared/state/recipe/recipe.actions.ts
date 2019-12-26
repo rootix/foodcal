@@ -1,4 +1,4 @@
-import { Recipe } from '../models/recipes.model';
+import { Recipe } from '../../models/recipes.model';
 
 export class AddRecipe {
     static readonly type = '[Recipe] Add Recipe';
@@ -17,7 +17,6 @@ export class DeleteRecipe {
 
 export class EnsureLoadAllRecipes {
     static readonly type = '[Recipe] Ensure Load All Recipes';
-    constructor(public recipes: Recipe[]) {}
 }
 
 export class RecipeLoading {

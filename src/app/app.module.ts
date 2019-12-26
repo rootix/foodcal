@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 import { CoreModule } from './core/core.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { RecipeState } from './shared/state/recipe/recipe.state';
 
 registerLocaleData(localeDeCh, 'de-CH');
 
@@ -23,7 +24,7 @@ registerLocaleData(localeDeCh, 'de-CH');
         ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
-        NgxsModule.forRoot([], { developmentMode: !environment.production }),
+        NgxsModule.forRoot([RecipeState], { developmentMode: !environment.production }),
         ScheduleModule,
         NgxsReduxDevtoolsPluginModule.forRoot()
     ],

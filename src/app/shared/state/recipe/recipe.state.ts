@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { patch, removeItem } from '@ngxs/store/operators';
 
-import { Recipe } from '../models/recipes.model';
+import { RECIPE_MOCKS } from '../../models/recipes.mock';
+import { Recipe } from '../../models/recipes.model';
 import {
     AddRecipe,
     DeleteRecipe,
@@ -61,18 +63,17 @@ export class RecipeState {
 
     @Action(DeleteRecipe)
     private deleteRecipe(context: StateContext<RecipeStateModel>, { id }: DeleteRecipe) {
-        const state = context.getState();
-        context.patchState({ recipes: [...state.recipes.filter(r => r.id !== id)] });
+        context.setState(patch({ recipes: removeItem<Recipe>(recipe => recipe.id === id) }));
     }
 
     @Action(EnsureLoadAllRecipes)
-    private ensureLoadAllRecipes(context: StateContext<RecipeStateModel>, { recipes }: EnsureLoadAllRecipes) {
+    private ensureLoadAllRecipes(context: StateContext<RecipeStateModel>) {
         const state = context.getState();
         if (state.loaded) {
             return context.dispatch(new RecipesLoaded());
         }
 
-        context.patchState({ loaded: true, recipes });
+        context.patchState({ loaded: true, recipes: RECIPE_MOCKS });
         return context.dispatch(new RecipesLoaded());
     }
 

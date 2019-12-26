@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { DialogService } from 'src/app/shared/dialog/dialog.service';
+import { Recipe } from 'src/app/shared/models';
+import { AddRecipe, DeleteRecipe, EnsureLoadAllRecipes, RecipeState, UpdateRecipe } from 'src/app/shared/state/recipe';
 
 import { RecipeDialogComponent } from '../../components/recipe-dialog/recipe-dialog.component';
-import { Recipe } from '../../models/recipes.model';
-import { RecipeService } from '../../recipe.service';
 
 @Component({
     selector: 'fc-recipes-view',
@@ -12,21 +14,21 @@ import { RecipeService } from '../../recipe.service';
 export class RecipesViewComponent implements OnInit {
     @ViewChild(RecipeDialogComponent) dialog: RecipeDialogComponent;
 
-    recipes$ = this.recipeService.recipes$;
-    loading$ = this.recipeService.loading$;
+    @Select(RecipeState.getAllRecipes) recipes$: Observable<Recipe[]>;
+    @Select(RecipeState.loading) loading$: Observable<Recipe[]>;
 
-    constructor(private recipeService: RecipeService, private dialogService: DialogService) {}
+    constructor(private store: Store, private dialogService: DialogService) {}
 
     ngOnInit() {
-        this.recipeService.ensureLoadRecipes();
+        this.store.dispatch(new EnsureLoadAllRecipes()).subscribe();
     }
 
     onAddRecipe() {
-        this.dialog.open({} as Recipe, r => this.recipeService.addRecipe(r));
+        this.dialog.open({} as Recipe, r => this.store.dispatch(new AddRecipe(r)));
     }
 
     onEditRecipe(recipe: Recipe) {
-        this.dialog.open(recipe, r => this.recipeService.updateRecipe(r));
+        this.dialog.open(recipe, r => this.store.dispatch(new UpdateRecipe(r)));
     }
 
     onDeleteRecipe(recipe: Recipe) {
@@ -34,7 +36,7 @@ export class RecipesViewComponent implements OnInit {
             .confirm(
                 'Bestätigen',
                 'Soll das Rezept wirklich gelöscht werden?',
-                () => this.recipeService.deleteRecipe(recipe),
+                () => this.store.dispatch(new DeleteRecipe(recipe.id)),
                 'Löschen',
                 'btn-danger'
             )

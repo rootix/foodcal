@@ -3,8 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClrForm, ClrLoadingState } from '@clr/angular';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-
-import { Recipe } from '../../models/recipes.model';
+import { Recipe } from 'src/app/shared/models';
 
 @Component({
     selector: 'fc-recipe-dialog',

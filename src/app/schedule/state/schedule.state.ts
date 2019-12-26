@@ -3,7 +3,7 @@ import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { addDays, eachDayOfInterval, getWeek, startOfWeek } from 'date-fns';
 import { of } from 'rxjs';
 import { delay, switchMap, tap } from 'rxjs/operators';
-import { RECIPE_MOCKS } from 'src/app/recipes/models/recipes.mock';
+import { RECIPE_MOCKS } from 'src/app/shared/models/recipes.mock';
 
 import { Meal, MealsPerDay, MealType, Week } from '../models/schedule.model';
 import { LoadMealsOfWeek, SwitchToNextWeek, SwitchToPreviousWeek, WeekLoaded, WeekLoading } from './schedule.actions';
@@ -71,10 +71,11 @@ export class ScheduleState implements NgxsOnInit {
         let mealIndex = 1;
         const interval = eachDayOfInterval({ start: payload.startDate, end: payload.endDate });
         interval.forEach((date: Date) => {
+            const recipeIndex = () => Math.floor(Math.random() * Math.floor(2));
             const lunch: Meal = {
                 id: mealIndex++,
                 date,
-                recipe: RECIPE_MOCKS[0],
+                recipe: RECIPE_MOCKS[recipeIndex()],
                 type: MealType.Lunch,
                 notes: 'Bla Bla Bla'
             };
@@ -82,7 +83,7 @@ export class ScheduleState implements NgxsOnInit {
             const dinner: Meal = {
                 id: mealIndex++,
                 date,
-                recipe: RECIPE_MOCKS[1],
+                recipe: RECIPE_MOCKS[recipeIndex()],
                 type: MealType.Dinner
             };
 

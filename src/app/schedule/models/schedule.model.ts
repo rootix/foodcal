@@ -1,4 +1,4 @@
-import { Recipe } from 'src/app/recipes/models/recipes.model';
+import { Recipe } from 'src/app/shared/models';
 
 export enum MealType {
     Lunch,
