@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from '@clr/angular';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 
@@ -12,6 +13,7 @@ import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 import { CoreModule } from './core/core.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { AuthState } from './shared/state/auth';
 import { RecipeState } from './shared/state/recipe/recipe.state';
 
 registerLocaleData(localeDeCh, 'de-CH');
@@ -24,7 +26,10 @@ registerLocaleData(localeDeCh, 'de-CH');
         ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
-        NgxsModule.forRoot([RecipeState], { developmentMode: !environment.production }),
+        NgxsModule.forRoot([AuthState, RecipeState], { developmentMode: !environment.production }),
+        NgxsStoragePluginModule.forRoot({
+            key: 'auth.token'
+        }),
         ScheduleModule,
         NgxsReduxDevtoolsPluginModule.forRoot()
     ],

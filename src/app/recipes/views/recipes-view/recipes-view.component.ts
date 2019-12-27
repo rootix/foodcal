@@ -15,7 +15,7 @@ export class RecipesViewComponent implements OnInit {
     @ViewChild(RecipeDialogComponent) dialog: RecipeDialogComponent;
 
     @Select(RecipeState.getAllRecipes) recipes$: Observable<Recipe[]>;
-    @Select(RecipeState.loading) loading$: Observable<Recipe[]>;
+    @Select(RecipeState.loading) loading$: Observable<boolean>;
 
     constructor(private store: Store, private dialogService: DialogService) {}
 

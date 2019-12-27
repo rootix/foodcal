@@ -5,7 +5,7 @@
                 <span class="title"><strong>Food</strong>cal</span>
             </a>
         </div>
-        <div class="header-nav" [clr-nav-level]="1">
+        <div class="header-nav" [clr-nav-level]="1" *ngIf="isAuthenticated$ | async">
             <a class="nav-link" routerLink="/schedule" routerLinkActive="active"
                 ><span class="nav-text">Wochenplan</span></a
             >

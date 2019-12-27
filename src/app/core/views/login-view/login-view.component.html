@@ -1,0 +1,14 @@
+<h1>Login</h1>
+<form clrForm [formGroup]="form">
+    <clr-input-container>
+        <label>Benutzername *</label>
+        <input clrInput formControlName="username" />
+        <clr-control-error>Pflichtfeld</clr-control-error>
+    </clr-input-container>
+    <clr-password-container>
+        <label>Passwort *</label>
+        <input clrPassword formControlName="password" />
+        <clr-control-error>Pflichtfeld</clr-control-error>
+    </clr-password-container>
+    <button type="button" (click)="onLogin()" class="btn btn-primary">Login</button>
+</form>
