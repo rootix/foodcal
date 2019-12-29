@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Router } from '@angular/router';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AuthState } from 'src/app/shared/state/auth';
+import { AuthState, Logout } from 'src/app/shared/state/auth';
 
 @Component({
     selector: 'fc-shell',
@@ -9,4 +10,13 @@ import { AuthState } from 'src/app/shared/state/auth';
 })
 export class ShellComponent {
     @Select(AuthState.isAuthenticated) isAuthenticated$: Observable<boolean>;
+
+    constructor(private store: Store, private router: Router) {}
+
+    onLogout() {
+        this.store.dispatch(new Logout()).subscribe(_ => {
+            // TODO: Move this to a class which handles ofActionSuccessful(Logout)
+            this.router.navigate(['/login']);
+        });
+    }
 }

@@ -13,7 +13,11 @@
                 ><span class="nav-text">Rezepte</span></a
             >
         </div>
-    </clr-header>
+        <div class="header-actions" *ngIf="isAuthenticated$ | async">
+            <a href="javascript:void(0);" (click)="onLogout()" class="nav-link nav-icon">
+                <clr-icon shape="logout"></clr-icon>
+            </a></div
+    ></clr-header>
     <div class="content-container">
         <div class="content-area">
             <router-outlet></router-outlet>

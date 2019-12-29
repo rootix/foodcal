@@ -1,4 +1,5 @@
 import { registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import localeDeCh from '@angular/common/locales/de-CH';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -22,6 +23,7 @@ registerLocaleData(localeDeCh, 'de-CH');
     declarations: [AppComponent],
     imports: [
         BrowserModule,
+        HttpClientModule,
         AppRoutes,
         ClarityModule,
         BrowserAnimationsModule,

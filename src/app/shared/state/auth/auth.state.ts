@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
 
-import { Login } from './auth.actions';
+import { AuthService } from '../../services/auth.service';
+import { Login, Logout } from './auth.actions';
 
 export interface AuthStateModel {
     token: string | null;
@@ -15,6 +17,8 @@ export interface AuthStateModel {
 })
 @Injectable()
 export class AuthState {
+    constructor(private authService: AuthService) {}
+
     @Selector()
     static token(state: AuthStateModel): string | null {
         return state.token;
@@ -27,6 +31,11 @@ export class AuthState {
 
     @Action(Login)
     login(ctx: StateContext<AuthStateModel>, action: Login) {
-        return ctx.patchState({ token: 'abcd' });
+        return this.authService.login(action.username, action.password).pipe(tap(token => ctx.patchState({ token })));
+    }
+
+    @Action(Logout)
+    logout(ctx: StateContext<AuthStateModel>) {
+        ctx.patchState({ token: null });
     }
 }

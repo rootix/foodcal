@@ -1,0 +1,7 @@
+[build]
+  functions = "functions/"
+[dev]
+  command = "npm start"
+  port = 8888
+  targetPort = 4200
+  functionsPort = 34567
