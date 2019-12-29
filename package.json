@@ -8,7 +8,8 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "netlify-dev": "netlify dev"
+        "netlify-dev": "netlify dev",
+        "postinstall": "netlify-lambda install"
     },
     "private": true,
     "dependencies": {
@@ -31,6 +32,7 @@
         "@webcomponents/custom-elements": "^1.0.0",
         "date-fns": "^2.8.1",
         "lit-element": "^2.2.1",
+        "netlify-lambda": "^1.6.3",
         "ramda": "^0.26.1",
         "rxjs": "~6.5.3",
         "tslib": "^1.10.0",
