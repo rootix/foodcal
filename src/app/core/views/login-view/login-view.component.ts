@@ -8,7 +8,7 @@ import { Login } from 'src/app/shared/state/auth';
 @Component({
     selector: 'fc-login-view',
     templateUrl: './login-view.component.html',
-    styleUrls: ['./login-view.component.css']
+    styleUrls: ['./login-view.component.scss']
 })
 export class LoginViewComponent {
     @ViewChild(ClrForm) clarityForm: ClrForm;
@@ -28,6 +28,13 @@ export class LoginViewComponent {
         }
 
         this.loginLoadingState = ClrLoadingState.LOADING;
-        this.store.dispatch(new Login(this.form.value)).subscribe(_ => this.router.navigate(['/schedule']));
+        const { username, password } = this.form.value;
+        this.store.dispatch(new Login(username, password)).subscribe(
+            _ => this.router.navigate(['/schedule']),
+            _ => {
+                this.loginLoadingState = ClrLoadingState.ERROR;
+                console.log('login failed', _);
+            }
+        );
     }
 }

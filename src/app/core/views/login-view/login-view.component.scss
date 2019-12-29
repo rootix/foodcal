@@ -1,0 +1,27 @@
+.login-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form-card {
+    width: 16.666rem;
+
+    ::ng-deep {
+        .clr-input-group {
+            width: 100%;
+            max-width: unset;
+        }
+        .clr-error .clr-input-group input {
+            width: 90%;
+        }
+        .clr-control-container,
+        .clr-control-container input {
+            width: 100%;
+        }
+
+        .card-block .btn {
+            margin-top: 1rem;
+        }
+    }
+}

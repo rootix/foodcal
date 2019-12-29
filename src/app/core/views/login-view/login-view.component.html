@@ -1,14 +1,29 @@
-<h1>Login</h1>
-<form clrForm [formGroup]="form">
-    <clr-input-container>
-        <label>Benutzername *</label>
-        <input clrInput formControlName="username" />
-        <clr-control-error>Pflichtfeld</clr-control-error>
-    </clr-input-container>
-    <clr-password-container>
-        <label>Passwort *</label>
-        <input clrPassword formControlName="password" />
-        <clr-control-error>Pflichtfeld</clr-control-error>
-    </clr-password-container>
-    <button type="button" (click)="onLogin()" class="btn btn-primary">Login</button>
-</form>
+<div class="login-form-container">
+    <div class="card login-form-card">
+        <div class="card-header">
+            Login
+        </div>
+        <div class="card-block">
+            <form clrForm [formGroup]="form" clrLayout="vertical">
+                <clr-input-container>
+                    <label>Benutzername</label>
+                    <input clrInput formControlName="username" />
+                    <clr-control-error>Pflichtfeld</clr-control-error>
+                </clr-input-container>
+                <clr-password-container>
+                    <label>Passwort</label>
+                    <input clrPassword formControlName="password" />
+                    <clr-control-error>Pflichtfeld</clr-control-error>
+                </clr-password-container>
+                <button
+                    type="button"
+                    (click)="onLogin()"
+                    class="btn btn-primary btn-block"
+                    [clrLoading]="loginLoadingState"
+                >
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
