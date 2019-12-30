@@ -6,6 +6,8 @@ const client = new faunadb.Client({
 });
 
 exports.handler = (event, context, callback) => {
+    console.log(process.env.FAUNADB_SECRET);
+
     if (event.httpMethod !== 'POST') {
         return callback(null, { statusCode: 405, body: 'Method Not Allowed' });
     }
@@ -19,7 +21,8 @@ exports.handler = (event, context, callback) => {
                 body: JSON.stringify(response.secret)
             });
         })
-        .catch(_ => {
+        .catch(error => {
+            console.log(`Login failed for user ${username}`, error.message);
             return callback(null, {
                 statusCode: 401,
                 body: 'Login failed'

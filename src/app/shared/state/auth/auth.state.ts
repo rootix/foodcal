@@ -36,6 +36,14 @@ export class AuthState {
 
     @Action(Logout)
     logout(ctx: StateContext<AuthStateModel>) {
-        ctx.patchState({ token: null });
+        const { token } = ctx.getState();
+        if (token == null) {
+            return;
+        }
+
+        return this.authService.logout(token).then(_ => {
+            ctx.patchState({ token: null });
+            return;
+        });
     }
 }

@@ -15,7 +15,7 @@
                     </span>
                 </clr-alert-item>
             </clr-alert>
-            <form clrForm [formGroup]="form" clrLayout="vertical" class="login-form">
+            <form clrForm [formGroup]="form" clrLayout="vertical" class="login-form" (submit)="onLogin()">
                 <clr-input-container>
                     <label>Benutzername</label>
                     <input clrInput formControlName="username" />
@@ -26,12 +26,7 @@
                     <input clrPassword formControlName="password" />
                     <clr-control-error>Pflichtfeld</clr-control-error>
                 </clr-password-container>
-                <button
-                    type="button"
-                    (click)="onLogin()"
-                    class="btn btn-primary btn-block"
-                    [clrLoading]="loginLoadingState"
-                >
+                <button type="submit" class="btn btn-primary btn-block" [clrLoading]="loginLoadingState">
                     Login
                 </button>
             </form>

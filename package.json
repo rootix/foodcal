@@ -3,13 +3,12 @@
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve",
+        "start": "netlify dev",
+        "serve": "ng serve",
         "build": "ng build",
         "test": "ng test",
         "lint": "ng lint",
-        "e2e": "ng e2e",
-        "netlify-dev": "netlify dev",
-        "postinstall": "netlify-lambda install"
+        "e2e": "ng e2e"
     },
     "private": true,
     "dependencies": {
@@ -31,8 +30,8 @@
         "@ngxs/store": "^3.6.0",
         "@webcomponents/custom-elements": "^1.0.0",
         "date-fns": "^2.8.1",
+        "faunadb": "^2.10.2",
         "lit-element": "^2.2.1",
-        "netlify-lambda": "^1.6.3",
         "ramda": "^0.26.1",
         "rxjs": "~6.5.3",
         "tslib": "^1.10.0",

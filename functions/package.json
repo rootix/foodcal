@@ -1,5 +1,0 @@
-{
-    "dependencies": {
-        "faunadb": "^2.10.2"
-    }
-}

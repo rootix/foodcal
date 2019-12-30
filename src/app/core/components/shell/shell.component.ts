@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { AuthState, Logout } from 'src/app/shared/state/auth';
 
@@ -8,15 +8,16 @@ import { AuthState, Logout } from 'src/app/shared/state/auth';
     selector: 'fc-shell',
     templateUrl: './shell.component.html'
 })
-export class ShellComponent {
+export class ShellComponent implements OnInit {
     @Select(AuthState.isAuthenticated) isAuthenticated$: Observable<boolean>;
 
-    constructor(private store: Store, private router: Router) {}
+    constructor(private store: Store, private actions$: Actions, private router: Router) {}
+
+    ngOnInit() {
+        this.actions$.pipe(ofActionSuccessful(Logout)).subscribe(_ => this.router.navigate(['/login']));
+    }
 
     onLogout() {
-        this.store.dispatch(new Logout()).subscribe(_ => {
-            // TODO: Move this to a class which handles ofActionSuccessful(Logout)
-            this.router.navigate(['/login']);
-        });
+        this.store.dispatch(new Logout()).subscribe();
     }
 }
