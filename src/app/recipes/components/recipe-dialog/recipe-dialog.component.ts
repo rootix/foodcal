@@ -16,7 +16,7 @@ export class RecipeDialogComponent {
     isNew = false;
 
     readonly form = new FormGroup({
-        id: new FormControl(0, Validators.required),
+        _id: new FormControl(0, Validators.required),
         name: new FormControl(null, Validators.required),
         url: new FormControl(),
         note: new FormControl()
@@ -27,7 +27,7 @@ export class RecipeDialogComponent {
 
     open(recipe: Recipe, submitHandler: (recipe: Recipe) => Observable<void>) {
         this.form.reset();
-        this.isNew = recipe.id === undefined;
+        this.isNew = recipe._id === undefined;
         this.submitHandler = submitHandler;
 
         if (!this.isNew) {

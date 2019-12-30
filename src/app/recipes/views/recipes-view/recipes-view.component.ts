@@ -36,7 +36,7 @@ export class RecipesViewComponent implements OnInit {
             .confirm(
                 'Bestätigen',
                 'Soll das Rezept wirklich gelöscht werden?',
-                () => this.store.dispatch(new DeleteRecipe(recipe.id)),
+                () => this.store.dispatch(new DeleteRecipe(recipe._id)),
                 'Löschen',
                 'btn-danger'
             )

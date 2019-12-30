@@ -8,6 +8,11 @@ import { ClarityModule } from '@clr/angular';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloLink } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
 import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
@@ -19,6 +24,31 @@ import { RecipeState } from './shared/state/recipe/recipe.state';
 
 registerLocaleData(localeDeCh, 'de-CH');
 
+const uri = 'https://graphql.fauna.com/graphql';
+
+export function provideApollo(httpLink: HttpLink) {
+    const basic = setContext((operation, context) => ({
+        headers: {
+            Accept: 'charset=utf-8'
+        }
+    }));
+
+    const token = localStorage.getItem('auth.token');
+    const auth = setContext((operation, context) => ({
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }));
+
+    const link = ApolloLink.from([basic, auth, httpLink.create({ uri })]);
+    const cache = new InMemoryCache();
+
+    return {
+        link,
+        cache
+    };
+}
+
 @NgModule({
     declarations: [AppComponent],
     imports: [
@@ -28,6 +58,7 @@ registerLocaleData(localeDeCh, 'de-CH');
         ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
+        HttpLinkModule,
         NgxsModule.forRoot([AuthState, RecipeState], { developmentMode: !environment.production }),
         NgxsStoragePluginModule.forRoot({
             key: 'auth.token'
@@ -36,6 +67,13 @@ registerLocaleData(localeDeCh, 'de-CH');
         NgxsReduxDevtoolsPluginModule.forRoot()
     ],
     bootstrap: [AppComponent],
-    providers: [{ provide: LOCALE_ID, useValue: 'de-CH' }]
+    providers: [
+        { provide: LOCALE_ID, useValue: 'de-CH' },
+        {
+            provide: APOLLO_OPTIONS,
+            useFactory: provideApollo,
+            deps: [HttpLink]
+        }
+    ]
 })
 export class AppModule {}

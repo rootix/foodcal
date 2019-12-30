@@ -1,0 +1,19 @@
+type Recipe {
+  name: String!
+  url: String
+  lastPreparation: Date
+  note: String,
+  tags: [String!]
+}
+
+type Meal {
+  date: Date
+  type: MealType
+  recipe: Recipe
+  notes: String
+}
+
+enum MealType {
+  Lunch,
+  Dinner
+}

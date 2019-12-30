@@ -12,7 +12,7 @@ export class UpdateRecipe {
 
 export class DeleteRecipe {
     static readonly type = '[Recipe] Delete Recipe';
-    constructor(public id: number) {}
+    constructor(public id: string) {}
 }
 
 export class EnsureLoadAllRecipes {

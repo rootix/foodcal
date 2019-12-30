@@ -30,6 +30,6 @@ export class RecipesListComponent implements AfterViewInit, OnDestroy {
     }
 
     trackById(_: number, item: Recipe) {
-        return item && item.id;
+        return item && item._id;
     }
 }

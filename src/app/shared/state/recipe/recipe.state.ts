@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { patch, removeItem } from '@ngxs/store/operators';
+import { tap } from 'rxjs/operators';
 
-import { RECIPE_MOCKS } from '../../models/recipes.mock';
 import { Recipe } from '../../models/recipes.model';
+import { RecipeService } from '../../services/recipe.service';
 import {
     AddRecipe,
     DeleteRecipe,
@@ -39,31 +40,46 @@ export class RecipeState {
         return loading;
     }
 
+    constructor(private recipeService: RecipeService) {}
+
     @Action(AddRecipe)
     private addRecipe(context: StateContext<RecipeStateModel>, { recipe }: AddRecipe) {
-        const state = context.getState();
-        recipe.id = Math.max(0, ...state.recipes.map(r => r.id)) + 1;
-        context.patchState({ recipes: [...state.recipes, recipe] });
+        const currentState = context.getState();
+        return this.recipeService.createRecipe(recipe).pipe(
+            tap(id => {
+                context.patchState({ recipes: [...currentState.recipes, Object.assign({}, recipe, { _id: id })] });
+            })
+        );
     }
 
     @Action(UpdateRecipe)
     private updateRecipe(context: StateContext<RecipeStateModel>, { recipe }: AddRecipe) {
         const state = context.getState();
-        context.patchState({
-            recipes: [
-                ...state.recipes.map(r => {
-                    if (r.id === recipe.id) {
-                        return Object.assign({}, r, recipe);
-                    }
-                    return r;
+        return this.recipeService.updateRecipe(recipe).pipe(
+            tap(timestamp =>
+                context.patchState({
+                    recipes: [
+                        ...state.recipes.map(r => {
+                            if (r._id === recipe._id) {
+                                return Object.assign({}, r, recipe, { _ts: timestamp });
+                            }
+                            return r;
+                        })
+                    ]
                 })
-            ]
-        });
+            )
+        );
     }
 
     @Action(DeleteRecipe)
     private deleteRecipe(context: StateContext<RecipeStateModel>, { id }: DeleteRecipe) {
-        context.setState(patch({ recipes: removeItem<Recipe>(recipe => recipe.id === id) }));
+        return this.recipeService
+            .deleteRecipe(id)
+            .pipe(
+                tap(deletedId =>
+                    context.setState(patch({ recipes: removeItem<Recipe>(recipe => recipe._id === deletedId) }))
+                )
+            );
     }
 
     @Action(EnsureLoadAllRecipes)
@@ -73,8 +89,10 @@ export class RecipeState {
             return context.dispatch(new RecipesLoaded());
         }
 
-        context.patchState({ loaded: true, recipes: RECIPE_MOCKS });
-        return context.dispatch(new RecipesLoaded());
+        return this.recipeService.getAllRecipes().pipe(
+            tap(recipes => context.patchState({ loaded: true, recipes })),
+            tap(_ => context.dispatch(new RecipesLoaded()))
+        );
     }
 
     @Action(RecipesLoading)

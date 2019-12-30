@@ -8,7 +8,7 @@ export interface Meal {
     id?: number;
     date: Date;
     type: MealType;
-    recipe: Recipe;
+    recipe?: Recipe;
     notes?: string;
 }
 
