@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Client, query } from 'faunadb';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -12,22 +13,9 @@ export class AuthService {
         return this.httpClient.post<string>('/.netlify/functions/login', JSON.stringify({ username, password }));
     }
 
-    logout(token: string): Promise<boolean> {
-        const client = this.getFaunaDbClient(token);
-
-        return client
-            .query(query.Logout(false))
-            .then(_ => {
-                return true;
-            })
-            .catch(_ => {
-                return false;
-            });
-    }
-
-    private getFaunaDbClient(token: string) {
-        return new Client({
-            secret: token
-        });
+    logout(token: string) {
+        return this.httpClient
+            .post<boolean>('/.netlify/functions/logout', JSON.stringify({ token }))
+            .pipe(catchError(_ => of(false)));
     }
 }

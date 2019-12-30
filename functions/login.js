@@ -6,8 +6,6 @@ const client = new faunadb.Client({
 });
 
 exports.handler = (event, context, callback) => {
-    console.log(process.env.FAUNADB_SECRET);
-
     if (event.httpMethod !== 'POST') {
         return callback(null, { statusCode: 405, body: 'Method Not Allowed' });
     }
