@@ -13,6 +13,7 @@ import { Login } from 'src/app/shared/state/auth';
 export class LoginViewComponent {
     @ViewChild(ClrForm) clarityForm: ClrForm;
     loginLoadingState: ClrLoadingState;
+    loginFailed: boolean;
 
     readonly form = new FormGroup({
         username: new FormControl(null, Validators.required),
@@ -33,8 +34,12 @@ export class LoginViewComponent {
             _ => this.router.navigate(['/schedule']),
             _ => {
                 this.loginLoadingState = ClrLoadingState.ERROR;
-                console.log('login failed', _);
+                this.loginFailed = true;
             }
         );
+    }
+
+    onLoginFailedAlertClosed() {
+        this.loginFailed = false;
     }
 }

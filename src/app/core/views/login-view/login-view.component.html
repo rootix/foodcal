@@ -4,7 +4,18 @@
             Login
         </div>
         <div class="card-block">
-            <form clrForm [formGroup]="form" clrLayout="vertical">
+            <clr-alert
+                [clrAlertType]="'danger'"
+                *ngIf="loginFailed"
+                (clrAlertClosedChange)="onLoginFailedAlertClosed()"
+            >
+                <clr-alert-item>
+                    <span class="alert-text">
+                        Login fehlgeschlagen.
+                    </span>
+                </clr-alert-item>
+            </clr-alert>
+            <form clrForm [formGroup]="form" clrLayout="vertical" class="login-form">
                 <clr-input-container>
                     <label>Benutzername</label>
                     <input clrInput formControlName="username" />
