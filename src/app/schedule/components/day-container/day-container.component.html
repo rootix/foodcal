@@ -1,2 +1,5 @@
-<div class="day-name">{{ date | dayName }}</div>
+<div class="day-information" [class.today]="isToday">
+    <span class="day-name">{{ date | dayName }}</span>
+    <span class="day-date">{{ date | date }}</span>
+</div>
 <ng-content></ng-content>

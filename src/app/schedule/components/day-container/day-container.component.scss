@@ -7,9 +7,26 @@
     margin: 1rem 0.5rem 0;
 }
 
-.day-name {
-    font-weight: bold;
+.day-information {
     margin-bottom: -0.8rem;
+
+    &.today {
+        font-size: 0.8rem;
+        color: var(--clr-btn-link-color);
+    }
+}
+
+.day-name {
+    padding-right: 0.2rem;
+    font-weight: bold;
+}
+
+.day-date:before {
+    content: '(';
+}
+
+.day-date:after {
+    content: ')';
 }
 
 @media all and (min-width: $bp-small) {
@@ -19,6 +36,17 @@
     }
 
     .day-name {
+        display: block;
+
+        width: 100%;
+    }
+
+    .day-date:before,
+    .day-date:after {
+        content: unset;
+    }
+
+    .day-information {
         width: 6rem;
         margin-top: 1rem;
     }
