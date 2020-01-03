@@ -7,13 +7,19 @@ type Recipe {
 }
 
 type Meal {
-  date: Date
-  type: MealType
-  recipe: Recipe
+  date: Date! @unique(index: "uniqueMeal") # type field is added to the Index in FaunaDB
+  type: MealType!
+  recipe: Recipe!
   notes: String
 }
 
 enum MealType {
   Lunch,
   Dinner
+}
+
+type Query {
+  allMeals: [Meal!]
+  allRecipes: [Recipe!]
+  mealsWithinDateRange(startDate: Date!, endDate: Date!): [Meal!] @resolver(name: "mealsWithinDateRange")
 }
