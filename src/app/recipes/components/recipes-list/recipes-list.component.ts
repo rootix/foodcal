@@ -12,7 +12,7 @@ import { Recipe } from 'src/app/shared/models';
 export class RecipesListComponent implements AfterViewInit, OnDestroy {
     @Input() recipes: Recipe[];
     @Input() loading: boolean;
-    @Output() addRecipe = new EventEmitter();
+    @Output() createRecipe = new EventEmitter();
     @Output() editRecipe = new EventEmitter<Recipe>();
     @Output() deleteRecipe = new EventEmitter<Recipe>();
 

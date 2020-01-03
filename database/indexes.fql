@@ -1,0 +1,26 @@
+{
+  name: "uniqueMeal",
+  unique: true,
+  serialized: true,
+  source: "Meal",
+  terms: [
+    {
+      field: ["data", "date"]
+    },
+    {
+      field: ["data", "type"]
+    }
+  ]
+}
+
+{
+  name: "users_by_email",
+  unique: true,
+  serialized: true,
+  source: "users",
+  terms: [
+    {
+      field: ["data", "email"]
+    }
+  ]
+}

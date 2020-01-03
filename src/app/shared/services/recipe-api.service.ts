@@ -6,15 +6,15 @@ import { map } from 'rxjs/operators';
 import { Recipe } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class RecipeService {
+export class RecipeApiService {
     constructor(private apollo: Apollo) {}
 
     getAllRecipes() {
         return this.apollo
-            .query<{ allRecipes: { data: Recipe[] } }>({
+            .query<{ allRecipesByDeletedFlag: { data: Recipe[] } }>({
                 query: gql`
                     query GetAllRecipes {
-                        allRecipes(_size: 1000) {
+                        allRecipesByDeletedFlag(_size: 1000, deleted: false) {
                             data {
                                 _id
                                 name
@@ -22,20 +22,21 @@ export class RecipeService {
                                 lastPreparation
                                 note
                                 tags
+                                deleted
                             }
                         }
                     }
                 `
             })
-            .pipe(map(response => response.data.allRecipes.data));
+            .pipe(map(response => response.data.allRecipesByDeletedFlag.data));
     }
 
     createRecipe(recipe: Recipe) {
         return this.apollo
             .mutate<{ createRecipe: { _id: string } }>({
                 mutation: gql`
-                    mutation CreateRecipe($name: String!, $url: String, $note: String) {
-                        createRecipe(data: { name: $name, url: $url, note: $note }) {
+                    mutation CreateRecipe($name: String!, $url: String, $note: String, $deleted: Boolean!) {
+                        createRecipe(data: { name: $name, url: $url, note: $note, deleted: $deleted }) {
                             _id
                         }
                     }
@@ -43,7 +44,8 @@ export class RecipeService {
                 variables: {
                     name: recipe.name,
                     url: recipe.url,
-                    note: recipe.note
+                    note: recipe.note,
+                    deleted: recipe.deleted
                 }
             })
             .pipe(map(response => response.data.createRecipe._id));
@@ -53,8 +55,8 @@ export class RecipeService {
         return this.apollo
             .mutate<{ updateRecipe: { _ts: number } }>({
                 mutation: gql`
-                    mutation UpdateRecipe($id: ID!, $name: String!, $url: String, $note: String) {
-                        updateRecipe(id: $id, data: { name: $name, url: $url, note: $note }) {
+                    mutation UpdateRecipe($id: ID!, $name: String!, $url: String, $note: String, $deleted: Boolean!) {
+                        updateRecipe(id: $id, data: { name: $name, url: $url, note: $note, deleted: $deleted }) {
                             _ts
                         }
                     }
@@ -63,26 +65,10 @@ export class RecipeService {
                     id: recipe._id,
                     name: recipe.name,
                     url: recipe.url,
-                    note: recipe.note
+                    note: recipe.note,
+                    deleted: recipe.deleted
                 }
             })
             .pipe(map(response => response.data.updateRecipe._ts));
-    }
-
-    deleteRecipe(id: string) {
-        return this.apollo
-            .mutate<{ deleteRecipe: { _id: string } }>({
-                mutation: gql`
-                    mutation DeleteRecipe($id: ID!) {
-                        deleteRecipe(id: $id) {
-                            _id
-                        }
-                    }
-                `,
-                variables: {
-                    id
-                }
-            })
-            .pipe(map(response => response.data.deleteRecipe._id));
     }
 }

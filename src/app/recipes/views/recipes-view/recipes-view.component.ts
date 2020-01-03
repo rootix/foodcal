@@ -3,7 +3,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { DialogService } from 'src/app/shared/dialog/dialog.service';
 import { Recipe } from 'src/app/shared/models';
-import { AddRecipe, DeleteRecipe, EnsureLoadAllRecipes, RecipeState, UpdateRecipe } from 'src/app/shared/state/recipe';
+import { CreateRecipe, DeleteRecipe, EnsureLoadAllRecipes, RecipeState, UpdateRecipe } from 'src/app/shared/state/recipe';
 
 import { RecipeDialogComponent } from '../../components/recipe-dialog/recipe-dialog.component';
 
@@ -23,8 +23,8 @@ export class RecipesViewComponent implements OnInit {
         this.store.dispatch(new EnsureLoadAllRecipes());
     }
 
-    onAddRecipe() {
-        this.dialog.open({} as Recipe, r => this.store.dispatch(new AddRecipe(r)));
+    onCreateRecipe() {
+        this.dialog.open({} as Recipe, r => this.store.dispatch(new CreateRecipe(r)));
     }
 
     onEditRecipe(recipe: Recipe) {
@@ -36,7 +36,7 @@ export class RecipesViewComponent implements OnInit {
             .confirm(
                 'Bestätigen',
                 'Soll das Rezept wirklich gelöscht werden?',
-                () => this.store.dispatch(new DeleteRecipe(recipe._id)),
+                () => this.store.dispatch(new DeleteRecipe(recipe)),
                 'Löschen',
                 'btn-danger'
             )

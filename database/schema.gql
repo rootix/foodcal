@@ -4,10 +4,11 @@ type Recipe {
   lastPreparation: Date
   note: String,
   tags: [String!]
+  deleted: Boolean!
 }
 
 type Meal {
-  date: Date! @unique(index: "uniqueMeal") # type field is added to the Index in FaunaDB
+  date: Date! @unique(index: "uniqueMeal")
   type: MealType!
   recipe: Recipe!
   notes: String
@@ -21,5 +22,5 @@ enum MealType {
 type Query {
   allMeals: [Meal!]
   allRecipes: [Recipe!]
-  mealsWithinDateRange(startDate: Date!, endDate: Date!): [Meal!] @resolver(name: "mealsWithinDateRange")
+  allRecipesByDeletedFlag(deleted: Boolean!): [Recipe!]
 }

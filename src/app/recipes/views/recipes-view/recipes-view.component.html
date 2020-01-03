@@ -2,7 +2,7 @@
 <fc-recipes-list
     [loading]="loading$ | async"
     [recipes]="recipes$ | async"
-    (addRecipe)="onAddRecipe()"
+    (createRecipe)="onCreateRecipe()"
     (editRecipe)="onEditRecipe($event)"
     (deleteRecipe)="onDeleteRecipe($event)"
 ></fc-recipes-list>

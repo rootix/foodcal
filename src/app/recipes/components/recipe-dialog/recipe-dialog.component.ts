@@ -16,10 +16,11 @@ export class RecipeDialogComponent {
     isNew = false;
 
     readonly form = new FormGroup({
-        _id: new FormControl(0, Validators.required),
+        _id: new FormControl(null, Validators.required),
         name: new FormControl(null, Validators.required),
         url: new FormControl(),
-        note: new FormControl()
+        note: new FormControl(),
+        deleted: new FormControl(null, Validators.required)
     });
 
     submitState: ClrLoadingState;
@@ -29,7 +30,7 @@ export class RecipeDialogComponent {
         this.form.reset();
         this.isNew = recipe._id === undefined;
         this.submitHandler = submitHandler;
-
+        this.form.patchValue({ _id: 0, deleted: false });
         if (!this.isNew) {
             this.form.patchValue(recipe);
         }
@@ -39,6 +40,7 @@ export class RecipeDialogComponent {
 
     onSubmit() {
         if (this.form.invalid) {
+            console.log(this.form.value);
             this.clarityForm.markAsTouched();
             return;
         }

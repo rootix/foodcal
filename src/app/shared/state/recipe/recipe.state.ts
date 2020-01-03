@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { patch, removeItem } from '@ngxs/store/operators';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { map, tap } from 'rxjs/operators';
 
 import { Recipe } from '../../models/recipes.model';
-import { RecipeService } from '../../services/recipe.service';
+import { RecipeApiService } from '../../services/recipe-api.service';
 import {
-    AddRecipe,
+    CreateRecipe,
     DeleteRecipe,
     EnsureLoadAllRecipes,
     RecipeLoaded as RecipesLoaded,
@@ -40,46 +40,40 @@ export class RecipeState {
         return loading;
     }
 
-    constructor(private recipeService: RecipeService) {}
+    constructor(private recipeService: RecipeApiService) {}
 
-    @Action(AddRecipe)
-    private addRecipe(context: StateContext<RecipeStateModel>, { recipe }: AddRecipe) {
-        const currentState = context.getState();
+    @Action(CreateRecipe)
+    private createRecipe(context: StateContext<RecipeStateModel>, { recipe }: CreateRecipe) {
         return this.recipeService.createRecipe(recipe).pipe(
             map(id => Object.assign({}, recipe, { _id: id } as Recipe)),
             tap(newRecipe => {
-                context.patchState({ recipes: [...currentState.recipes, newRecipe] });
+                context.setState(patch({ recipes: append([newRecipe]) }));
             })
         );
     }
 
     @Action(UpdateRecipe)
-    private updateRecipe(context: StateContext<RecipeStateModel>, { recipe }: AddRecipe) {
-        const state = context.getState();
+    private updateRecipe(context: StateContext<RecipeStateModel>, { recipe }: CreateRecipe) {
         return this.recipeService.updateRecipe(recipe).pipe(
             tap(timestamp =>
-                context.patchState({
-                    recipes: [
-                        ...state.recipes.map(r => {
-                            if (r._id === recipe._id) {
-                                return Object.assign({}, r, recipe, { _ts: timestamp });
-                            }
-                            return r;
-                        })
-                    ]
-                })
+                context.setState(
+                    patch({
+                        recipes: updateItem(
+                            r => r._id === recipe._id,
+                            Object.assign({}, recipe, { _ts: timestamp } as Recipe)
+                        )
+                    })
+                )
             )
         );
     }
 
     @Action(DeleteRecipe)
-    private deleteRecipe(context: StateContext<RecipeStateModel>, { id }: DeleteRecipe) {
+    private deleteRecipe(context: StateContext<RecipeStateModel>, { recipe }: DeleteRecipe) {
         return this.recipeService
-            .deleteRecipe(id)
+            .updateRecipe(Object.assign({}, recipe, { deleted: true }))
             .pipe(
-                tap(deletedId =>
-                    context.setState(patch({ recipes: removeItem<Recipe>(recipe => recipe._id === deletedId) }))
-                )
+                tap(timestamp => context.setState(patch({ recipes: removeItem<Recipe>(r => r._id === recipe._id) })))
             );
     }
 

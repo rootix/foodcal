@@ -5,7 +5,7 @@ import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { finalize, map, withLatestFrom } from 'rxjs/operators';
 import { Recipe } from 'src/app/shared/models';
-import { AddRecipe, EnsureLoadAllRecipes, RecipeState } from 'src/app/shared/state/recipe';
+import { CreateRecipe, EnsureLoadAllRecipes, RecipeState } from 'src/app/shared/state/recipe';
 
 import { Meal } from '../../models/schedule.model';
 
@@ -34,11 +34,11 @@ export class MealDialogComponent implements OnInit {
     submitState: ClrLoadingState;
 
     private submitHandler: (meal: Meal) => Observable<void>;
-    private addRecipeLoadingSubject = new BehaviorSubject(false);
+    private createRecipeLoadingSubject = new BehaviorSubject(false);
 
     constructor(private store: Store) {
-        this.loading$ = combineLatest([this.allRecipesLoading$, this.addRecipeLoadingSubject]).pipe(
-            map(([allRecipesLoading, addRecipeLoading]) => allRecipesLoading || addRecipeLoading)
+        this.loading$ = combineLatest([this.allRecipesLoading$, this.createRecipeLoadingSubject]).pipe(
+            map(([allRecipesLoading, createRecipeLoading]) => allRecipesLoading || createRecipeLoading)
         );
     }
 
@@ -57,14 +57,14 @@ export class MealDialogComponent implements OnInit {
         this.isOpen = true;
     }
 
-    onAddRecipe = (recipeName: string) => {
-        this.addRecipeLoadingSubject.next(true);
+    onCreateRecipe = (recipeName: string) => {
+        this.createRecipeLoadingSubject.next(true);
         return this.store
-            .dispatch(new AddRecipe({ name: recipeName }))
+            .dispatch(new CreateRecipe({ name: recipeName }))
             .pipe(
                 withLatestFrom(this.allRecipes$),
                 map(([_, allRecipes]) => allRecipes[allRecipes.length - 1]),
-                finalize(() => this.addRecipeLoadingSubject.next(false))
+                finalize(() => this.createRecipeLoadingSubject.next(false))
             )
             .toPromise();
     };
