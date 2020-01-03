@@ -8,6 +8,9 @@ import { Meal } from '../../models/schedule.model';
     styleUrls: ['./meal-card.component.scss']
 })
 export class MealCardComponent implements OnInit {
+    get isNew() {
+        return !this.meal || this.meal._id == null;
+    }
     @Input() meal: Meal;
     constructor() {}
 

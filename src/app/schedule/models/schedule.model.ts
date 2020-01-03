@@ -5,7 +5,7 @@ export enum MealType {
     Dinner
 }
 export interface Meal {
-    id?: number;
+    _id?: number;
     date: Date;
     type: MealType;
     recipe?: Recipe;

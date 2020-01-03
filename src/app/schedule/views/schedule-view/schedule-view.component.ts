@@ -1,23 +1,27 @@
 import { Component } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
-import { ScheduleService } from '../../schedule.service';
+import { MealsPerDay, Week } from '../../models/schedule.model';
+import { SwitchToNextWeek, SwitchToPreviousWeek } from '../../state/schedule.actions';
+import { ScheduleState } from '../../state/schedule.state';
 
 @Component({
     selector: 'fc-schedule-view',
     templateUrl: './schedule-view.component.html'
 })
 export class ScheduleViewComponent {
-    readonly week$ = this.scheduleService.week$;
-    readonly mealsOfWeek$ = this.scheduleService.mealsOfWeek$;
-    readonly loading$ = this.scheduleService.loading$;
+    @Select(ScheduleState.week) public week$: Observable<Week>;
+    @Select(ScheduleState.mealsOfWeek) public mealsOfWeek$: Observable<MealsPerDay[]>;
+    @Select(ScheduleState.loading) public loading$: Observable<boolean>;
 
-    constructor(private scheduleService: ScheduleService) {}
+    constructor(private store: Store) {}
 
     onSwitchToNextWeek() {
-        this.scheduleService.switchToNextWeek().subscribe();
+        this.store.dispatch(new SwitchToNextWeek()).subscribe();
     }
 
     onSwitchToPreviousWeek() {
-        this.scheduleService.switchToPreviousWeek().subscribe();
+        this.store.dispatch(new SwitchToPreviousWeek()).subscribe();
     }
 }

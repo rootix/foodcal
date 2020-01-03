@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { addDays, eachDayOfInterval, getWeek, startOfWeek } from 'date-fns';
-import { of } from 'rxjs';
-import { delay, switchMap, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 
 import { Meal, MealsPerDay, MealType, Week } from '../models/schedule.model';
+import { ScheduleApiService } from '../services/schedule-api.service';
 import { LoadMealsOfWeek, SwitchToNextWeek, SwitchToPreviousWeek, WeekLoaded, WeekLoading } from './schedule.actions';
 
 interface ScheduleStateModel {
@@ -38,10 +38,12 @@ export class ScheduleState implements NgxsOnInit {
         return state.loading;
     }
 
+    constructor(private scheduleApiService: ScheduleApiService) {}
+
     ngxsOnInit(ctx: StateContext<ScheduleStateModel>) {
         const currentWeek = this.getCurrentWeek();
         ctx.patchState({ week: currentWeek });
-        ctx.dispatch(new LoadMealsOfWeek(currentWeek.startDate, currentWeek.endDate));
+        return ctx.dispatch(new LoadMealsOfWeek(currentWeek.startDate, currentWeek.endDate));
     }
 
     @Action(SwitchToNextWeek)
@@ -50,7 +52,7 @@ export class ScheduleState implements NgxsOnInit {
         const nextWeekStartDate = addDays(currentStartDate, 7);
         const nextWeek = this.getWeekForDate(nextWeekStartDate);
         ctx.patchState({ week: nextWeek });
-        ctx.dispatch(new LoadMealsOfWeek(nextWeek.startDate, nextWeek.endDate));
+        return ctx.dispatch(new LoadMealsOfWeek(nextWeek.startDate, nextWeek.endDate));
     }
 
     @Action(SwitchToPreviousWeek)
@@ -59,46 +61,16 @@ export class ScheduleState implements NgxsOnInit {
         const previousWeekStartDate = addDays(currentStartDate, -7);
         const previousWeek = this.getWeekForDate(previousWeekStartDate);
         ctx.patchState({ week: previousWeek });
-        ctx.dispatch(new LoadMealsOfWeek(previousWeek.startDate, previousWeek.endDate));
+        return ctx.dispatch(new LoadMealsOfWeek(previousWeek.startDate, previousWeek.endDate));
     }
 
     @Action(LoadMealsOfWeek)
     private loadMealsOfWeek(ctx: StateContext<ScheduleStateModel>, payload: LoadMealsOfWeek) {
-        ctx.dispatch(new WeekLoading());
-        // TODO: Replace Mock with real implementation
-        const mealsPerDay: MealsPerDay[] = [];
-        let mealIndex = 1;
-        const interval = eachDayOfInterval({ start: payload.startDate, end: payload.endDate });
-        interval.forEach((date: Date) => {
-            const lunch: Meal = {
-                id: mealIndex++,
-                date,
-                recipe: { name: 'Mittagsrezept' },
-                type: MealType.Lunch,
-                notes: 'Bla Bla Bla'
-            };
-
-            const dinner: Meal = {
-                id: mealIndex++,
-                date,
-                recipe: { name: 'Abendrezept' },
-                type: MealType.Dinner
-            };
-
-            const day: MealsPerDay = {
-                date,
-                meals: [lunch, dinner]
-            };
-
-            mealsPerDay.push(day);
-        });
-
-        return of(mealsPerDay).pipe(
-            delay(1000),
-            tap(meals => {
-                ctx.patchState({ mealsOfWeek: meals });
-            }),
-            switchMap(_ => ctx.dispatch(new WeekLoaded()))
+        return ctx.dispatch(new WeekLoading()).pipe(
+            switchMap(_ => this.scheduleApiService.getMealsOfWeek(payload.startDate, payload.endDate)),
+            map(existingMeals => this.buildCompleteMealsOfWeek(payload.startDate, payload.endDate, existingMeals)),
+            tap(meals => ctx.patchState({ mealsOfWeek: meals })),
+            mergeMap(_ => ctx.dispatch(new WeekLoaded()))
         );
     }
 
@@ -131,5 +103,32 @@ export class ScheduleState implements NgxsOnInit {
 
     private getWeek(date: Date) {
         return getWeek(date, { weekStartsOn: 1 });
+    }
+
+    private buildCompleteMealsOfWeek(startDate: Date, endDate: Date, existingMeals: Meal[]) {
+        const mealsPerDay: MealsPerDay[] = [];
+        const interval = eachDayOfInterval({ start: startDate, end: endDate });
+        interval.forEach((date: Date) => {
+            const lunch = existingMeals.find(m => m.date.getTime() === date.getTime() && m.type === MealType.Lunch) || {
+                date,
+                type: MealType.Lunch
+            };
+
+            const dinner = existingMeals.find(
+                m => m.date.getTime() === date.getTime() && m.type === MealType.Dinner
+            ) || {
+                date,
+                type: MealType.Dinner
+            };
+
+            const day: MealsPerDay = {
+                date,
+                meals: [lunch, dinner]
+            };
+
+            mealsPerDay.push(day);
+        });
+
+        return mealsPerDay;
     }
 }
