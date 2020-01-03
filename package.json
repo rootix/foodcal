@@ -25,6 +25,7 @@
         "@clr/core": "^3.0.0-next.5",
         "@clr/icons": "^3.0.0-next.5",
         "@clr/ui": "^3.0.0-next.5",
+        "@ng-select/ng-select": "^3.7.1",
         "@ngxs/devtools-plugin": "^3.6.0",
         "@ngxs/storage-plugin": "^3.6.0",
         "@ngxs/store": "^3.6.0",

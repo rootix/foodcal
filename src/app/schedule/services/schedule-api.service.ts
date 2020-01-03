@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { startOfDay } from 'date-fns';
+import { format, startOfDay } from 'date-fns';
 import gql from 'graphql-tag';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Meal, MealType } from '../models/schedule.model';
 
@@ -13,7 +13,7 @@ export class ScheduleApiService {
     constructor(private apollo: Apollo) {}
 
     getMealsOfWeek(startDate: Date, endDate: Date) {
-        // TODO: This is a workaround and very inefficient. Only load the relevant Meals!
+        // TODO: This is a workaround and very inefficient. Only load the relevant Meals! P.S. Apollo caching rocks :D
         return this.apollo
             .query<{ allMeals: { data: any[] } }>({
                 query: gql`
@@ -37,9 +37,72 @@ export class ScheduleApiService {
                 map(response => response.data.allMeals.data),
                 map(graphQlMeals => graphQlMeals.map(m => this.convertGraphQlMealToMeal(m))),
                 map(meals => meals.filter(m => m.date >= startDate)),
-                map(meals => meals.filter(m => m.date <= endDate)),
-                tap(meals => console.log('meals3', meals))
+                map(meals => meals.filter(m => m.date <= endDate))
             );
+    }
+
+    createMeal(meal: Meal) {
+        return this.apollo
+            .mutate<{ createMeal: { _id: string } }>({
+                mutation: gql`
+                    mutation CreateMeal($date: Date!, $type: MealType!, $recipe: MealRecipeRelation!, $notes: String) {
+                        createMeal(data: { date: $date, type: $type, recipe: $recipe, notes: $notes }) {
+                            _id
+                        }
+                    }
+                `,
+                variables: {
+                    date: format(meal.date, 'yyyy-MM-dd'),
+                    type: MealType[meal.type],
+                    recipe: { connect: meal.recipe._id },
+                    notes: meal.notes
+                }
+            })
+            .pipe(map(response => response.data.createMeal._id));
+    }
+
+    updateMeal(meal: Meal) {
+        return this.apollo
+            .mutate<{ updateMeal: { _ts: number } }>({
+                mutation: gql`
+                    mutation UpdateMeal(
+                        $id: ID!
+                        $date: Date!
+                        $type: MealType!
+                        $recipe: MealRecipeRelation!
+                        $notes: String
+                    ) {
+                        updateMeal(id: $id, data: { date: $date, type: $type, recipe: $recipe, notes: $notes }) {
+                            _ts
+                        }
+                    }
+                `,
+                variables: {
+                    id: meal._id,
+                    date: format(meal.date, 'yyyy-MM-dd'),
+                    type: MealType[meal.type],
+                    recipe: { connect: meal.recipe._id },
+                    notes: meal.notes
+                }
+            })
+            .pipe(map(response => response.data.updateMeal._ts));
+    }
+
+    deleteMeal(id: string) {
+        return this.apollo
+            .mutate<{ deleteMeal: { _id: string } }>({
+                mutation: gql`
+                    mutation DeleteMeal($id: ID!) {
+                        deleteMeal(id: $id) {
+                            _id
+                        }
+                    }
+                `,
+                variables: {
+                    id
+                }
+            })
+            .pipe(map(response => response.data.deleteMeal._id));
     }
 
     private convertGraphQlMealToMeal(graphQlMeal: any): Meal {
@@ -47,7 +110,8 @@ export class ScheduleApiService {
             _id: graphQlMeal._id,
             date: startOfDay(new Date(graphQlMeal.date)),
             recipe: { _id: graphQlMeal.recipe._id, name: graphQlMeal.recipe.name },
-            type: MealType[graphQlMeal.type as string]
+            type: MealType[graphQlMeal.type as string],
+            notes: graphQlMeal.notes
         };
     }
 }

@@ -27,6 +27,17 @@ registerLocaleData(localeDeCh, 'de-CH');
 const uri = 'https://graphql.fauna.com/graphql';
 
 export function provideApollo(httpLink: HttpLink) {
+    const defaultOptions = {
+        watchQuery: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'ignore'
+        },
+        query: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all'
+        }
+    };
+
     const basic = setContext((operation, context) => ({
         headers: {
             Accept: 'charset=utf-8'
@@ -45,7 +56,8 @@ export function provideApollo(httpLink: HttpLink) {
 
     return {
         link,
-        cache
+        cache,
+        defaultOptions
     };
 }
 
@@ -59,7 +71,10 @@ export function provideApollo(httpLink: HttpLink) {
         BrowserAnimationsModule,
         CoreModule,
         HttpLinkModule,
-        NgxsModule.forRoot([AuthState, RecipeState], { developmentMode: !environment.production }),
+        NgxsModule.forRoot([AuthState, RecipeState], {
+            developmentMode: !environment.production,
+            selectorOptions: { injectContainerState: false, suppressErrors: false }
+        }),
         NgxsStoragePluginModule.forRoot({
             key: 'auth.token'
         }),

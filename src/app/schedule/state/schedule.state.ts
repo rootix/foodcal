@@ -1,16 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { addDays, eachDayOfInterval, getWeek, startOfWeek } from 'date-fns';
-import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { mergeMap, switchMap, tap } from 'rxjs/operators';
 
 import { Meal, MealsPerDay, MealType, Week } from '../models/schedule.model';
 import { ScheduleApiService } from '../services/schedule-api.service';
-import { LoadMealsOfWeek, SwitchToNextWeek, SwitchToPreviousWeek, WeekLoaded, WeekLoading } from './schedule.actions';
+import {
+    CreateMeal,
+    DeleteMeal,
+    EnsureInitializeSchedule,
+    LoadMealsOfWeek,
+    SwitchToNextWeek,
+    SwitchToPreviousWeek,
+    UpdateMeal,
+    WeekLoaded,
+    WeekLoading,
+} from './schedule.actions';
 
 interface ScheduleStateModel {
     loading: boolean;
     week: Week;
-    mealsOfWeek: MealsPerDay[];
+    mealsOfWeek: Meal[];
 }
 
 @State<ScheduleStateModel>({
@@ -18,7 +29,7 @@ interface ScheduleStateModel {
     defaults: {
         loading: false,
         week: null,
-        mealsOfWeek: []
+        mealsOfWeek: undefined
     }
 })
 @Injectable()
@@ -30,7 +41,7 @@ export class ScheduleState implements NgxsOnInit {
 
     @Selector()
     static mealsOfWeek(state: ScheduleStateModel) {
-        return state.mealsOfWeek;
+        return this.buildCompleteMealsOfWeek(state.week.startDate, state.week.endDate, state.mealsOfWeek || []);
     }
 
     @Selector()
@@ -40,10 +51,80 @@ export class ScheduleState implements NgxsOnInit {
 
     constructor(private scheduleApiService: ScheduleApiService) {}
 
+    private static buildCompleteMealsOfWeek(startDate: Date, endDate: Date, existingMeals: Meal[]) {
+        const mealsPerDay: MealsPerDay[] = [];
+        const interval = eachDayOfInterval({ start: startDate, end: endDate });
+        interval.forEach((date: Date) => {
+            const lunch = existingMeals.find(m => m.date.getTime() === date.getTime() && m.type === MealType.Lunch) || {
+                date,
+                type: MealType.Lunch
+            };
+
+            const dinner = existingMeals.find(
+                m => m.date.getTime() === date.getTime() && m.type === MealType.Dinner
+            ) || {
+                date,
+                type: MealType.Dinner
+            };
+
+            const day: MealsPerDay = {
+                date,
+                meals: [lunch, dinner]
+            };
+
+            mealsPerDay.push(day);
+        });
+
+        return mealsPerDay;
+    }
+
     ngxsOnInit(ctx: StateContext<ScheduleStateModel>) {
         const currentWeek = this.getCurrentWeek();
         ctx.patchState({ week: currentWeek });
-        return ctx.dispatch(new LoadMealsOfWeek(currentWeek.startDate, currentWeek.endDate));
+    }
+
+    @Action(CreateMeal)
+    private createMeal(ctx: StateContext<ScheduleStateModel>, { meal }: CreateMeal) {
+        return this.scheduleApiService
+            .createMeal(meal)
+            .pipe(
+                tap(id => ctx.setState(patch({ mealsOfWeek: append([Object.assign({}, meal, { _id: id } as Meal)]) })))
+            );
+    }
+
+    @Action(UpdateMeal)
+    private updateMeal(ctx: StateContext<ScheduleStateModel>, { meal }: UpdateMeal) {
+        return this.scheduleApiService
+            .updateMeal(meal)
+            .pipe(
+                tap(timestamp =>
+                    ctx.setState(
+                        patch({
+                            mealsOfWeek: updateItem<Meal>(
+                                m => m._id === meal._id,
+                                Object.assign({}, meal, { _ts: timestamp } as Meal)
+                            )
+                        })
+                    )
+                )
+            );
+    }
+
+    @Action(DeleteMeal)
+    private deleteMeal(ctx: StateContext<ScheduleStateModel>, { id }: DeleteMeal) {
+        return this.scheduleApiService
+            .deleteMeal(id)
+            .pipe(tap(deletedId => ctx.setState(patch({ mealsOfWeek: removeItem<Meal>(m => m._id === deletedId) }))));
+    }
+
+    @Action(EnsureInitializeSchedule)
+    private ensureInitializeSchedule(ctx: StateContext<ScheduleStateModel>) {
+        const currentState = ctx.getState();
+        if (currentState.mealsOfWeek != null) {
+            return;
+        }
+
+        return ctx.dispatch(new LoadMealsOfWeek(currentState.week.startDate, currentState.week.endDate));
     }
 
     @Action(SwitchToNextWeek)
@@ -68,7 +149,6 @@ export class ScheduleState implements NgxsOnInit {
     private loadMealsOfWeek(ctx: StateContext<ScheduleStateModel>, payload: LoadMealsOfWeek) {
         return ctx.dispatch(new WeekLoading()).pipe(
             switchMap(_ => this.scheduleApiService.getMealsOfWeek(payload.startDate, payload.endDate)),
-            map(existingMeals => this.buildCompleteMealsOfWeek(payload.startDate, payload.endDate, existingMeals)),
             tap(meals => ctx.patchState({ mealsOfWeek: meals })),
             mergeMap(_ => ctx.dispatch(new WeekLoaded()))
         );
@@ -103,32 +183,5 @@ export class ScheduleState implements NgxsOnInit {
 
     private getWeek(date: Date) {
         return getWeek(date, { weekStartsOn: 1 });
-    }
-
-    private buildCompleteMealsOfWeek(startDate: Date, endDate: Date, existingMeals: Meal[]) {
-        const mealsPerDay: MealsPerDay[] = [];
-        const interval = eachDayOfInterval({ start: startDate, end: endDate });
-        interval.forEach((date: Date) => {
-            const lunch = existingMeals.find(m => m.date.getTime() === date.getTime() && m.type === MealType.Lunch) || {
-                date,
-                type: MealType.Lunch
-            };
-
-            const dinner = existingMeals.find(
-                m => m.date.getTime() === date.getTime() && m.type === MealType.Dinner
-            ) || {
-                date,
-                type: MealType.Dinner
-            };
-
-            const day: MealsPerDay = {
-                date,
-                meals: [lunch, dinner]
-            };
-
-            mealsPerDay.push(day);
-        });
-
-        return mealsPerDay;
     }
 }

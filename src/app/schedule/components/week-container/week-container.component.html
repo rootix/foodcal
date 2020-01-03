@@ -1,5 +1,13 @@
 <clr-spinner class="loading-indicator" *ngIf="loading"></clr-spinner>
 
 <fc-day-container *ngFor="let day of mealsOfWeek" [date]="day.date"
-    ><fc-meal-card *ngFor="let meal of day.meals" [meal]="meal"></fc-meal-card
+    ><fc-meal-card
+        *ngFor="let meal of day.meals"
+        [meal]="meal"
+        (createMeal)="onCreateMeal($event)"
+        (editMeal)="onEditMeal($event)"
+        (deleteMeal)="onDeleteMeal($event)"
+    ></fc-meal-card
 ></fc-day-container>
+
+<fc-meal-dialog></fc-meal-dialog>

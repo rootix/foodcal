@@ -5,11 +5,12 @@ export enum MealType {
     Dinner
 }
 export interface Meal {
-    _id?: number;
+    _id?: string;
     date: Date;
     type: MealType;
     recipe?: Recipe;
     notes?: string;
+    _ts?: number;
 }
 
 export interface Week {

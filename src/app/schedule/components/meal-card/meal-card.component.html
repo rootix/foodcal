@@ -1,19 +1,24 @@
 <div class="card" [class.empty]="isNew">
     <div class="card-block">
         <span class="card-tag">{{ meal.type === 0 ? 'Mittag' : 'Abend' }}</span>
-        <h3 class="card-title">{{ meal.recipe?.name || '< Kein Menu >' }}</h3>
-        <p class="card-text">
+        <h3 class="card-title">{{ meal.recipe?.name || 'Kein Menü definiert' }}</h3>
+        <p class="card-text" *ngIf="meal.notes">
             {{ meal.notes }}
         </p>
     </div>
     <div class="card-footer">
-        <button class="btn btn-icon btn-link" *ngIf="isNew">
+        <button class="btn btn-icon" *ngIf="isNew" (click)="createMeal.emit(meal)">
             <clr-icon shape="plus" title="Menu hinzufügen"></clr-icon>
         </button>
-        <button class="btn btn-icon btn-link" *ngIf="!isNew" title="Menu bearbeiten">
+        <button class="btn btn-icon" *ngIf="!isNew" title="Menu bearbeiten" (click)="editMeal.emit(meal)">
             <clr-icon shape="pencil"></clr-icon>
         </button>
-        <button class="btn btn-icon btn-link" *ngIf="!isNew" title="Menu löschen">
+        <button
+            class="btn btn-icon btn-danger-outline"
+            *ngIf="!isNew"
+            title="Menu löschen"
+            (click)="deleteMeal.emit(meal)"
+        >
             <clr-icon shape="trash" class="is-error"></clr-icon>
         </button>
     </div>

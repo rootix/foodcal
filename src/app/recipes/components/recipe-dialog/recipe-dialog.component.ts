@@ -40,6 +40,7 @@ export class RecipeDialogComponent {
     onSubmit() {
         if (this.form.invalid) {
             this.clarityForm.markAsTouched();
+            return;
         }
 
         this.submitState = ClrLoadingState.LOADING;

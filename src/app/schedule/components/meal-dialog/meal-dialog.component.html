@@ -1,0 +1,34 @@
+<clr-modal [(clrModalOpen)]="isOpen">
+    <h3 class="modal-title">{{ isNew ? 'Neues Menu' : 'Menu bearbeiten' }}</h3>
+    <div class="modal-body">
+        <form clrForm [formGroup]="form" class="full-width-form">
+            <clr-input-container>
+                <label>Rezept *</label>
+                <ng-select
+                    clrInput
+                    [items]="allRecipes$ | async"
+                    bindLabel="name"
+                    formControlName="recipe"
+                    [virtualScroll]="true"
+                    [addTag]="onAddRecipe"
+                    addTagText="Neues Rezept hinzufügen"
+                    loadingText="Rezepte werden geladen"
+                    [loading]="loading$ | async"
+                    appendTo="body"
+                >
+                </ng-select>
+                <clr-control-error>Pflichtfeld</clr-control-error>
+            </clr-input-container>
+            <clr-textarea-container>
+                <label>Notizen</label>
+                <textarea clrTextarea formControlName="notes"></textarea>
+            </clr-textarea-container>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="isOpen = false">Abbrechen</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()" [clrLoading]="submitState">
+            {{ isNew ? 'Erstellen' : 'Aktualisieren' }}
+        </button>
+    </div>
+</clr-modal>

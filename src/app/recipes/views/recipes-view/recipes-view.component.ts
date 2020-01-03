@@ -20,7 +20,7 @@ export class RecipesViewComponent implements OnInit {
     constructor(private store: Store, private dialogService: DialogService) {}
 
     ngOnInit() {
-        this.store.dispatch(new EnsureLoadAllRecipes()).subscribe();
+        this.store.dispatch(new EnsureLoadAllRecipes());
     }
 
     onAddRecipe() {

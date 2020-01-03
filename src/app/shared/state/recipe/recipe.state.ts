@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { patch, removeItem } from '@ngxs/store/operators';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Recipe } from '../../models/recipes.model';
 import { RecipeService } from '../../services/recipe.service';
@@ -46,8 +46,9 @@ export class RecipeState {
     private addRecipe(context: StateContext<RecipeStateModel>, { recipe }: AddRecipe) {
         const currentState = context.getState();
         return this.recipeService.createRecipe(recipe).pipe(
-            tap(id => {
-                context.patchState({ recipes: [...currentState.recipes, Object.assign({}, recipe, { _id: id })] });
+            map(id => Object.assign({}, recipe, { _id: id } as Recipe)),
+            tap(newRecipe => {
+                context.patchState({ recipes: [...currentState.recipes, newRecipe] });
             })
         );
     }

@@ -18,6 +18,6 @@ export class ShellComponent implements OnInit {
     }
 
     onLogout() {
-        this.store.dispatch(new Logout()).subscribe();
+        this.store.dispatch(new Logout());
     }
 }

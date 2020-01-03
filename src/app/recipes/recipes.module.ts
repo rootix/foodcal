@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from '../shared/shared.module';
 import { RecipeDialogComponent } from './components/recipe-dialog/recipe-dialog.component';
@@ -8,7 +7,7 @@ import { RecipesRoutes } from './recipes.routing';
 import { RecipesViewComponent } from './views/recipes-view/recipes-view.component';
 
 @NgModule({
-    imports: [SharedModule, RecipesRoutes, ReactiveFormsModule],
+    imports: [SharedModule, RecipesRoutes],
     declarations: [RecipesViewComponent, RecipesListComponent, RecipeDialogComponent]
 })
 export class RecipesModule {}
