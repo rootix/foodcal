@@ -45,7 +45,7 @@ export class RecipeApiService {
                     name: recipe.name,
                     url: recipe.url,
                     note: recipe.note,
-                    deleted: recipe.deleted
+                    deleted: recipe.deleted || false
                 }
             })
             .pipe(map(response => response.data.createRecipe._id));
@@ -66,7 +66,7 @@ export class RecipeApiService {
                     name: recipe.name,
                     url: recipe.url,
                     note: recipe.note,
-                    deleted: recipe.deleted
+                    deleted: recipe.deleted || false
                 }
             })
             .pipe(map(response => response.data.updateRecipe._ts));

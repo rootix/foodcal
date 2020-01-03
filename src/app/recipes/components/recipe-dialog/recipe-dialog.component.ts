@@ -19,8 +19,7 @@ export class RecipeDialogComponent {
         _id: new FormControl(null, Validators.required),
         name: new FormControl(null, Validators.required),
         url: new FormControl(),
-        note: new FormControl(),
-        deleted: new FormControl(null, Validators.required)
+        note: new FormControl()
     });
 
     submitState: ClrLoadingState;
@@ -30,7 +29,7 @@ export class RecipeDialogComponent {
         this.form.reset();
         this.isNew = recipe._id === undefined;
         this.submitHandler = submitHandler;
-        this.form.patchValue({ _id: 0, deleted: false });
+        this.form.patchValue({ _id: 0 });
         if (!this.isNew) {
             this.form.patchValue(recipe);
         }
