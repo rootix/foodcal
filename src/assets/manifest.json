@@ -1,5 +1,6 @@
 {
     "name": "Foodcal",
     "display": "standalone",
-    "theme_color": "#00364d"
+    "theme_color": "#00364d",
+    "background_color": "#00364d"
 }
