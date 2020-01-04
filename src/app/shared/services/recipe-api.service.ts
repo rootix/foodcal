@@ -98,6 +98,10 @@ export class RecipeApiService {
 
         const parsedDates = datesAsString.map(d => startOfDay(new Date(d)));
         const datesNotInFuture = parsedDates.filter(d => !isFuture(d));
+        if (!datesNotInFuture.length) {
+            return null;
+        }
+
         return max(datesNotInFuture);
     }
 }
