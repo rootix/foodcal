@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-import { ClrDatagrid } from '@clr/angular';
+import { ClrDatagrid, ClrDatagridSortOrder } from '@clr/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Recipe } from 'src/app/shared/models';
@@ -17,6 +17,8 @@ export class RecipesListComponent implements AfterViewInit, OnDestroy {
     @Output() deleteRecipe = new EventEmitter<Recipe>();
 
     @ViewChild(ClrDatagrid) grid: ClrDatagrid;
+
+    ascSort = ClrDatagridSortOrder.ASC;
 
     private destroySubject = new Subject();
 

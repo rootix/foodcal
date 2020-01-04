@@ -4,7 +4,7 @@
             <clr-icon shape="plus"></clr-icon> Neues Rezept
         </button>
     </clr-dg-action-bar>
-    <clr-dg-column [clrDgField]="'name'">Rezept</clr-dg-column>
+    <clr-dg-column [clrDgField]="'name'" [clrDgSortOrder]="ascSort">Rezept</clr-dg-column>
     <clr-dg-column>URL</clr-dg-column>
     <clr-dg-column [clrDgSortBy]="'lastPreparation'">Letzte Zubereitung</clr-dg-column>
     <clr-dg-column class="action-column"></clr-dg-column>

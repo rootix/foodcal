@@ -60,7 +60,7 @@ export class RecipeState {
                     patch({
                         recipes: updateItem(
                             r => r._id === recipe._id,
-                            Object.assign({}, recipe, { _ts: timestamp } as Recipe)
+                            patch(Object.assign({}, recipe, { _ts: timestamp } as Recipe))
                         )
                     })
                 )

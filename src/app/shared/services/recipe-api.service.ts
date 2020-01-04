@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
+import { isFuture, max, startOfDay } from 'date-fns';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 
@@ -19,16 +20,23 @@ export class RecipeApiService {
                                 _id
                                 name
                                 url
-                                lastPreparation
                                 note
                                 tags
                                 deleted
+                                meals {
+                                    data {
+                                        date
+                                    }
+                                }
                             }
                         }
                     }
                 `
             })
-            .pipe(map(response => response.data.allRecipesByDeletedFlag.data));
+            .pipe(
+                map(response => response.data.allRecipesByDeletedFlag.data),
+                map(graphQlRecipes => graphQlRecipes.map(r => this.convertGraphQlRecipeToRecipe(r)))
+            );
     }
 
     createRecipe(recipe: Recipe) {
@@ -70,5 +78,26 @@ export class RecipeApiService {
                 }
             })
             .pipe(map(response => response.data.updateRecipe._ts));
+    }
+
+    private convertGraphQlRecipeToRecipe(graphQlRecipe: any): Recipe {
+        return {
+            _id: graphQlRecipe._id,
+            name: graphQlRecipe.name,
+            url: graphQlRecipe.url,
+            lastPreparation: this.getNewestNonFutureDateFromGraphQlDates(graphQlRecipe.meals.data.map(d => d.date)),
+            note: graphQlRecipe.note,
+            deleted: graphQlRecipe.deleted
+        };
+    }
+
+    private getNewestNonFutureDateFromGraphQlDates(datesAsString: string[]): Date {
+        if (datesAsString == null || !datesAsString.length) {
+            return null;
+        }
+
+        const parsedDates = datesAsString.map(d => startOfDay(new Date(d)));
+        const datesNotInFuture = parsedDates.filter(d => !isFuture(d));
+        return max(datesNotInFuture);
     }
 }

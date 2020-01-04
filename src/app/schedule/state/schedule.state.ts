@@ -94,20 +94,18 @@ export class ScheduleState implements NgxsOnInit {
 
     @Action(UpdateMeal)
     private updateMeal(ctx: StateContext<ScheduleStateModel>, { meal }: UpdateMeal) {
-        return this.scheduleApiService
-            .updateMeal(meal)
-            .pipe(
-                tap(timestamp =>
-                    ctx.setState(
-                        patch({
-                            mealsOfWeek: updateItem<Meal>(
-                                m => m._id === meal._id,
-                                Object.assign({}, meal, { _ts: timestamp } as Meal)
-                            )
-                        })
-                    )
+        return this.scheduleApiService.updateMeal(meal).pipe(
+            tap(timestamp =>
+                ctx.setState(
+                    patch({
+                        mealsOfWeek: updateItem<Meal>(
+                            m => m._id === meal._id,
+                            patch(Object.assign({}, meal, { _ts: timestamp } as Meal))
+                        )
+                    })
                 )
-            );
+            )
+        );
     }
 
     @Action(DeleteMeal)
