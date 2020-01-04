@@ -26,3 +26,7 @@ export class RecipeLoading {
 export class RecipeLoaded {
     static readonly type = '[Recipe] Recipes Loaded';
 }
+
+export class RecalculateTags {
+    static readonly type = '[Recipe] Recalculate Tags';
+}

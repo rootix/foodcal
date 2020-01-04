@@ -11,6 +11,7 @@ export class RecipeApiService {
     constructor(private apollo: Apollo) {}
 
     getAllRecipes() {
+        // TODO: The Join to meals is super inefficient as i only need the newest date. Learn FQL -.-
         return this.apollo
             .query<{ allRecipesByDeletedFlag: { data: Recipe[] } }>({
                 query: gql`
@@ -23,7 +24,7 @@ export class RecipeApiService {
                                 note
                                 tags
                                 deleted
-                                meals {
+                                meals(_size: 1000) {
                                     data {
                                         date
                                     }
@@ -43,8 +44,14 @@ export class RecipeApiService {
         return this.apollo
             .mutate<{ createRecipe: { _id: string } }>({
                 mutation: gql`
-                    mutation CreateRecipe($name: String!, $url: String, $note: String, $deleted: Boolean!) {
-                        createRecipe(data: { name: $name, url: $url, note: $note, deleted: $deleted }) {
+                    mutation CreateRecipe(
+                        $name: String!
+                        $url: String
+                        $note: String
+                        $deleted: Boolean!
+                        $tags: [String!]
+                    ) {
+                        createRecipe(data: { name: $name, url: $url, note: $note, deleted: $deleted, tags: $tags }) {
                             _id
                         }
                     }
@@ -53,7 +60,8 @@ export class RecipeApiService {
                     name: recipe.name,
                     url: recipe.url,
                     note: recipe.note,
-                    deleted: recipe.deleted || false
+                    deleted: recipe.deleted || false,
+                    tags: recipe.tags || []
                 }
             })
             .pipe(map(response => response.data.createRecipe._id));
@@ -63,8 +71,18 @@ export class RecipeApiService {
         return this.apollo
             .mutate<{ updateRecipe: { _ts: number } }>({
                 mutation: gql`
-                    mutation UpdateRecipe($id: ID!, $name: String!, $url: String, $note: String, $deleted: Boolean!) {
-                        updateRecipe(id: $id, data: { name: $name, url: $url, note: $note, deleted: $deleted }) {
+                    mutation UpdateRecipe(
+                        $id: ID!
+                        $name: String!
+                        $url: String
+                        $note: String
+                        $deleted: Boolean!
+                        $tags: [String!]
+                    ) {
+                        updateRecipe(
+                            id: $id
+                            data: { name: $name, url: $url, note: $note, deleted: $deleted, tags: $tags }
+                        ) {
                             _ts
                         }
                     }
@@ -74,7 +92,8 @@ export class RecipeApiService {
                     name: recipe.name,
                     url: recipe.url,
                     note: recipe.note,
-                    deleted: recipe.deleted || false
+                    deleted: recipe.deleted || false,
+                    tags: recipe.tags || []
                 }
             })
             .pipe(map(response => response.data.updateRecipe._ts));
@@ -87,6 +106,7 @@ export class RecipeApiService {
             url: graphQlRecipe.url,
             lastPreparation: this.getNewestNonFutureDateFromGraphQlDates(graphQlRecipe.meals.data.map(d => d.date)),
             note: graphQlRecipe.note,
+            tags: graphQlRecipe.tags,
             deleted: graphQlRecipe.deleted
         };
     }

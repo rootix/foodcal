@@ -4,6 +4,7 @@ export interface Recipe {
     url?: string;
     lastPreparation?: Date;
     note?: string;
+    tags?: [];
     _ts?: number;
     deleted?: boolean;
 }

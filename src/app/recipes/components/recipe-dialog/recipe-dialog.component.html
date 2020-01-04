@@ -11,6 +11,18 @@
                 <label>URL</label>
                 <input clrInput formControlName="url" />
             </clr-input-container>
+            <clr-input-container>
+                <label>Tags</label>
+                <ng-select
+                    clrInput
+                    formControlName="tags"
+                    addTagText="Neues Tag hinzufügen"
+                    appendTo="body"
+                    [items]="tags$ | async"
+                    [multiple]="true"
+                    [addTag]="onAddTag"
+                ></ng-select>
+            </clr-input-container>
             <clr-textarea-container>
                 <label>Notizen</label>
                 <textarea clrTextarea formControlName="note"></textarea>

@@ -7,6 +7,10 @@
     <clr-dg-column [clrDgField]="'name'" [clrDgSortOrder]="ascSort">Rezept</clr-dg-column>
     <clr-dg-column>URL</clr-dg-column>
     <clr-dg-column [clrDgSortBy]="'lastPreparation'">Letzte Zubereitung</clr-dg-column>
+    <clr-dg-column
+        >Tags
+        <clr-dg-filter [clrDgFilter]="tagFilter"> <fc-tag-filter #tagFilter></fc-tag-filter> </clr-dg-filter>
+    </clr-dg-column>
     <clr-dg-column class="action-column"></clr-dg-column>
 
     <clr-dg-row *clrDgItems="let recipe of recipes; trackBy: trackById">
@@ -15,6 +19,9 @@
             ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></clr-dg-cell
         >
         <clr-dg-cell>{{ recipe.lastPreparation | date }}</clr-dg-cell>
+        <clr-dg-cell
+            ><span class="label label-info" *ngFor="let tag of recipe.tags">{{ tag }}</span>
+        </clr-dg-cell>
 
         <clr-dg-cell class="action-cell">
             <button class="btn btn-icon btn-link btn-sm" (click)="editRecipe.emit(recipe)">

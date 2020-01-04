@@ -1,9 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClrForm, ClrLoadingState } from '@clr/angular';
+import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { Recipe } from 'src/app/shared/models';
+import { RecipeState } from 'src/app/shared/state/recipe';
 
 @Component({
     selector: 'fc-recipe-dialog',
@@ -12,6 +14,8 @@ import { Recipe } from 'src/app/shared/models';
 export class RecipeDialogComponent {
     @ViewChild(ClrForm) clarityForm: ClrForm;
 
+    @Select(RecipeState.getTags) tags$: Observable<string[]>;
+
     isOpen = false;
     isNew = false;
 
@@ -19,6 +23,7 @@ export class RecipeDialogComponent {
         _id: new FormControl(null, Validators.required),
         name: new FormControl(null, Validators.required),
         url: new FormControl(),
+        tags: new FormControl(),
         note: new FormControl()
     });
 
@@ -35,6 +40,10 @@ export class RecipeDialogComponent {
         }
 
         this.isOpen = true;
+    }
+
+    onAddTag(tag: string) {
+        return tag;
     }
 
     onSubmit() {
