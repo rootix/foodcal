@@ -1,8 +1,10 @@
 <button class="btn btn-icon btn-sm btn-link previous-week-button" (click)="switchToPreviousWeek.emit()">
     <clr-icon shape="angle" dir="left"></clr-icon>
 </button>
-<strong>KW {{ week.calendarWeek }}</strong>
-({{ week.startDate | date }} - {{ week.endDate | date }})
+<span [class.current]="week.isCurrentWeek">
+    <strong>KW {{ week.calendarWeek }}</strong> ({{ week.startDate | date: 'dd.MM.' }} –
+    {{ week.endDate | date: 'dd.MM.' }})</span
+>
 <button class="btn btn-icon btn-sm btn-link next-week-button" (click)="switchToNextWeek.emit()">
     <clr-icon shape="angle" dir="right"></clr-icon>
 </button>

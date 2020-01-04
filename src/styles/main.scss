@@ -4,3 +4,7 @@
 @import './globals.scss';
 
 @import './ng-select.scss';
+
+.current {
+    color: var(--clr-btn-link-color);
+}
