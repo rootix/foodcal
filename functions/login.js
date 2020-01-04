@@ -12,7 +12,7 @@ exports.handler = (event, context, callback) => {
 
     const { username, password } = JSON.parse(event.body);
     client
-        .query(q.Login(q.Match(q.Index('users_by_email'), username), { password }))
+        .query(q.Login(q.Match(q.Index('usersByEmail'), username), { password }))
         .then(response => {
             return callback(null, {
                 statusCode: 200,

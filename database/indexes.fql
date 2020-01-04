@@ -1,8 +1,8 @@
-{
+CreateIndex({
   name: "uniqueMeal",
   unique: true,
   serialized: true,
-  source: "Meal",
+  source: Collection("Meal"),
   terms: [
     {
       field: ["data", "date"]
@@ -11,16 +11,11 @@
       field: ["data", "type"]
     }
   ]
-}
+})
 
-{
-  name: "users_by_email",
+CreateIndex({
+  name: "usersByEmail",
+  source: Collection("Users"),
+  terms: [{field: ["data", "email"]}],
   unique: true,
-  serialized: true,
-  source: "users",
-  terms: [
-    {
-      field: ["data", "email"]
-    }
-  ]
-}
+})
