@@ -7,12 +7,14 @@ import { AuthService } from '../../services/auth.service';
 import { Login, Logout } from './auth.actions';
 
 export interface AuthStateModel {
+    userId: number | null;
     token: string | null;
 }
 
 @State<AuthStateModel>({
     name: 'auth',
     defaults: {
+        userId: null,
         token: null
     }
 })
@@ -21,18 +23,27 @@ export class AuthState {
     constructor(private authService: AuthService) {}
 
     @Selector()
-    static token(state: AuthStateModel): string | null {
+    static userId(state: AuthStateModel) {
+        return state.userId;
+    }
+
+    @Selector()
+    static token(state: AuthStateModel) {
         return state.token;
     }
 
     @Selector()
     static isAuthenticated(state: AuthStateModel) {
-        return !!state.token;
+        return !!state.userId && !!state.token;
     }
 
     @Action(Login)
     login(ctx: StateContext<AuthStateModel>, action: Login) {
-        return this.authService.login(action.username, action.password).pipe(tap(token => ctx.patchState({ token })));
+        return this.authService.login(action.username, action.password).pipe(
+            tap(response => {
+                ctx.patchState(response);
+            })
+        );
     }
 
     @Action(Logout)

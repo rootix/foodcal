@@ -75,7 +75,7 @@ export function provideApollo(httpLink: HttpLink) {
             selectorOptions: { injectContainerState: false, suppressErrors: false }
         }),
         NgxsStoragePluginModule.forRoot({
-            key: 'auth.token'
+            key: ['auth.userId', 'auth.token']
         }),
         ScheduleModule,
         NgxsReduxDevtoolsPluginModule.forRoot()

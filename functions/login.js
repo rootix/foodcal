@@ -14,9 +14,12 @@ exports.handler = (event, context, callback) => {
     client
         .query(q.Login(q.Match(q.Index('usersByEmail'), username), { password }))
         .then(response => {
+            const instanceValue = response.instance.toString();
+            const userId = instanceValue.substring(27, instanceValue.lastIndexOf('"'));
+            const token = response.secret;
             return callback(null, {
                 statusCode: 200,
-                body: JSON.stringify(response.secret)
+                body: JSON.stringify({ userId, token })
             });
         })
         .catch(error => {
