@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Apollo } from 'apollo-angular';
 import { isFuture, max, startOfDay } from 'date-fns';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 
 import { Recipe } from '../models';
+import { AuthState } from '../state/auth';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeApiService {
-    constructor(private apollo: Apollo) {}
+    constructor(private apollo: Apollo, private store: Store) {}
 
     getAllRecipes() {
         // TODO: The Join to meals is super inefficient as i only need the newest date. Learn FQL -.-
@@ -50,8 +52,11 @@ export class RecipeApiService {
                         $note: String
                         $deleted: Boolean!
                         $tags: [String!]
+                        $owner: RecipeOwnerRelation!
                     ) {
-                        createRecipe(data: { name: $name, url: $url, note: $note, deleted: $deleted, tags: $tags }) {
+                        createRecipe(
+                            data: { name: $name, url: $url, note: $note, deleted: $deleted, tags: $tags, owner: $owner }
+                        ) {
                             _id
                         }
                     }
@@ -61,7 +66,8 @@ export class RecipeApiService {
                     url: recipe.url,
                     note: recipe.note,
                     deleted: recipe.deleted || false,
-                    tags: recipe.tags || []
+                    tags: recipe.tags || [],
+                    owner: { connect: this.store.selectSnapshot(AuthState.userId) }
                 }
             })
             .pipe(map(response => response.data.createRecipe._id));
@@ -78,10 +84,11 @@ export class RecipeApiService {
                         $note: String
                         $deleted: Boolean!
                         $tags: [String!]
+                        $owner: RecipeOwnerRelation!
                     ) {
                         updateRecipe(
                             id: $id
-                            data: { name: $name, url: $url, note: $note, deleted: $deleted, tags: $tags }
+                            data: { name: $name, url: $url, note: $note, deleted: $deleted, tags: $tags, owner: $owner }
                         ) {
                             _ts
                         }
@@ -93,7 +100,8 @@ export class RecipeApiService {
                     url: recipe.url,
                     note: recipe.note,
                     deleted: recipe.deleted || false,
-                    tags: recipe.tags || []
+                    tags: recipe.tags || [],
+                    owner: { connect: this.store.selectSnapshot(AuthState.userId) }
                 }
             })
             .pipe(map(response => response.data.updateRecipe._ts));

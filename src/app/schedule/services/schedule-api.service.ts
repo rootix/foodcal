@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Apollo } from 'apollo-angular';
 import { format, startOfDay } from 'date-fns';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
+import { AuthState } from 'src/app/shared/state/auth';
 
 import { Meal, MealType } from '../models/schedule.model';
 
@@ -10,7 +12,7 @@ import { Meal, MealType } from '../models/schedule.model';
     providedIn: 'root'
 })
 export class ScheduleApiService {
-    constructor(private apollo: Apollo) {}
+    constructor(private apollo: Apollo, private store: Store) {}
 
     getMealsOfWeek(startDate: Date, endDate: Date) {
         // TODO: This is a workaround and very inefficient. Only load the relevant Meals! P.S. Apollo caching rocks :D
@@ -45,8 +47,14 @@ export class ScheduleApiService {
         return this.apollo
             .mutate<{ createMeal: { _id: string } }>({
                 mutation: gql`
-                    mutation CreateMeal($date: Date!, $type: MealType!, $recipe: MealRecipeRelation!, $notes: String) {
-                        createMeal(data: { date: $date, type: $type, recipe: $recipe, notes: $notes }) {
+                    mutation CreateMeal(
+                        $date: Date!
+                        $type: MealType!
+                        $recipe: MealRecipeRelation!
+                        $notes: String
+                        $owner: MealOwnerRelation!
+                    ) {
+                        createMeal(data: { date: $date, type: $type, recipe: $recipe, notes: $notes, owner: $owner }) {
                             _id
                         }
                     }
@@ -55,7 +63,8 @@ export class ScheduleApiService {
                     date: format(meal.date, 'yyyy-MM-dd'),
                     type: MealType[meal.type],
                     recipe: { connect: meal.recipe._id },
-                    notes: meal.notes
+                    notes: meal.notes,
+                    owner: { connect: this.store.selectSnapshot(AuthState.userId) }
                 }
             })
             .pipe(map(response => response.data.createMeal._id));
@@ -71,8 +80,12 @@ export class ScheduleApiService {
                         $type: MealType!
                         $recipe: MealRecipeRelation!
                         $notes: String
+                        $owner: MealOwnerRelation!
                     ) {
-                        updateMeal(id: $id, data: { date: $date, type: $type, recipe: $recipe, notes: $notes }) {
+                        updateMeal(
+                            id: $id
+                            data: { date: $date, type: $type, recipe: $recipe, notes: $notes, owner: $owner }
+                        ) {
                             _ts
                         }
                     }
@@ -82,7 +95,8 @@ export class ScheduleApiService {
                     date: format(meal.date, 'yyyy-MM-dd'),
                     type: MealType[meal.type],
                     recipe: { connect: meal.recipe._id },
-                    notes: meal.notes
+                    notes: meal.notes,
+                    owner: { connect: this.store.selectSnapshot(AuthState.userId) }
                 }
             })
             .pipe(map(response => response.data.updateMeal._ts));

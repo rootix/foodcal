@@ -5,11 +5,7 @@ import { tap } from 'rxjs/operators';
 
 import { AuthService } from '../../services/auth.service';
 import { Login, Logout } from './auth.actions';
-
-export interface AuthStateModel {
-    userId: number | null;
-    token: string | null;
-}
+import { AuthStateModel } from './auth.model';
 
 @State<AuthStateModel>({
     name: 'auth',

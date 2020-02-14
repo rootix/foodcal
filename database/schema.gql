@@ -1,3 +1,7 @@
+type User {
+  username: String!
+}
+
 type Recipe {
   name: String!
   url: String
@@ -5,6 +9,7 @@ type Recipe {
   tags: [String!]
   deleted: Boolean!
   meals: [Meal!] @relation
+  owner: User!
 }
 
 type Meal {
@@ -12,6 +17,7 @@ type Meal {
   type: MealType!
   recipe: Recipe!
   notes: String
+  owner: User!
 }
 
 enum MealType {
