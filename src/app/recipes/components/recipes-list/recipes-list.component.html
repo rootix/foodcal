@@ -13,7 +13,7 @@
     </clr-dg-column>
     <clr-dg-column class="action-column"></clr-dg-column>
 
-    <clr-dg-row *clrDgItems="let recipe of recipes; trackBy: trackById">
+    <clr-dg-row *clrDgItems="let recipe of recipes">
         <clr-dg-cell>{{ recipe.name }}</clr-dg-cell>
         <clr-dg-cell
             ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></clr-dg-cell
