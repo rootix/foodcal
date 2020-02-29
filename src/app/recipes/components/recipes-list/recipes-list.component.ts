@@ -1,7 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ClrDatagrid, ClrDatagridSortOrder } from '@clr/angular';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Recipe } from 'src/app/shared/models';
 
 @Component({
@@ -9,7 +7,7 @@ import { Recipe } from 'src/app/shared/models';
     templateUrl: './recipes-list.component.html',
     styleUrls: ['./recipes-list.component.scss']
 })
-export class RecipesListComponent implements AfterViewInit, OnDestroy {
+export class RecipesListComponent {
     @Input() recipes: Recipe[];
     @Input() loading: boolean;
     @Output() createRecipe = new EventEmitter();
@@ -19,19 +17,4 @@ export class RecipesListComponent implements AfterViewInit, OnDestroy {
     @ViewChild(ClrDatagrid) grid: ClrDatagrid;
 
     ascSort = ClrDatagridSortOrder.ASC;
-
-    private destroySubject = new Subject();
-
-    ngAfterViewInit() {
-        // This is a hack because Clarity does not delete removed rows
-        this.grid.rows.changes.pipe(takeUntil(this.destroySubject)).subscribe(_ => this.grid.resize());
-    }
-
-    ngOnDestroy() {
-        this.destroySubject.next();
-    }
-
-    trackById(_: number, item: Recipe) {
-        return item && item._id;
-    }
 }
