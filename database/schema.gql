@@ -1,26 +1,27 @@
 type Recipe {
-  name: String!
-  url: String
-  note: String,
-  tags: [String!]
-  deleted: Boolean!
-  meals: [Meal!] @relation
+    name: String!
+    url: String
+    note: String
+    tags: [String!]
+    deleted: Boolean!
+    meals: [Meal!] @relation
 }
 
 type Meal {
-  date: Date!
-  type: MealType!
-  recipe: Recipe!
-  notes: String
+    date: Date!
+    type: MealType!
+    recipe: Recipe!
+    notes: String
 }
 
 enum MealType {
-  Lunch,
-  Dinner
+    Lunch
+    Dinner
 }
 
 type Query {
-  allMeals: [Meal!]
-  allRecipes: [Recipe!]
-  allRecipesByDeletedFlag(deleted: Boolean!): [Recipe!]
+    allMeals: [Meal!]
+    allRecipes: [Recipe!]
+    allRecipesByDeletedFlag(deleted: Boolean!): [Recipe!]
+    allMealsInDateRange(from: Date!, to: Date!): [Meal!] @resolver(name: "allMealsInDateRange", paginated: true)
 }
