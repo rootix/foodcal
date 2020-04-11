@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { format, startOfDay } from 'date-fns';
+import { differenceInCalendarDays, format, startOfDay } from 'date-fns';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 
@@ -13,12 +13,12 @@ export class ScheduleApiService {
     constructor(private apollo: Apollo) {}
 
     getMealsOfWeek(startDate: Date, endDate: Date) {
-        // TODO: This is a workaround and very inefficient. Only load the relevant Meals! P.S. Apollo caching rocks :D
+        const maxNumberOfMeals = (differenceInCalendarDays(endDate, startDate) + 1) * 2;
         return this.apollo
-            .query<{ allMeals: { data: any[] } }>({
+            .query<{ allMealsInDateRange: { data: any[] } }>({
                 query: gql`
-                    query GetAllMeals {
-                        allMeals(_size: 1000) {
+                    query GetMealsOfWeek($from: Date!, $to: Date!, $size: Int!) {
+                        allMealsInDateRange(from: $from, to: $to, _size: $size) {
                             data {
                                 _id
                                 date
@@ -31,10 +31,15 @@ export class ScheduleApiService {
                             }
                         }
                     }
-                `
+                `,
+                variables: {
+                    from: format(startDate, 'yyyy-MM-dd'),
+                    to: format(endDate, 'yyyy-MM-dd'),
+                    size: maxNumberOfMeals
+                }
             })
             .pipe(
-                map(response => response.data.allMeals.data),
+                map(response => response.data.allMealsInDateRange.data),
                 map(graphQlMeals => graphQlMeals.map(m => this.convertGraphQlMealToMeal(m))),
                 map(meals => meals.filter(m => m.date >= startDate)),
                 map(meals => meals.filter(m => m.date <= endDate))
