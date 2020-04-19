@@ -69,7 +69,7 @@ Create(
 )
 ```
 
-7. Create Users role with the following permissions:
+7. Create Users role with the following permissions and ensure, that in the Membership tab, you add the Users collection to the role
 
 ![Users Role Permissions](users-role.png)
 
