@@ -50,13 +50,13 @@ $ng-select-border: rgba(black, 0.12) !default;
             color: $ng-select-primary-light-text;
         }
     }
-    .ng-select-multiple {
+    &.ng-select-multiple {
         .ng-value-container {
             .ng-value {
                 color: $ng-select-highlight;
                 background: $ng-select-bg;
                 border-radius: 3px;
-                padding: 0 8px;
+                padding: 0 8px 0 0;
             }
         }
         .ng-input {

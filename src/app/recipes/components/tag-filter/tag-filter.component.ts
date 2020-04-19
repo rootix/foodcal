@@ -29,6 +29,6 @@ export class TagFilterComponent implements ClrDatagridFilterInterface<Recipe> {
         return this.selectedTags.length > 0;
     }
     accepts(recipe: Recipe) {
-        return recipe.tags.filter(t => this.selectedTags.includes(t)).length > 0;
+        return recipe.tags?.filter(t => this.selectedTags.includes(t)).length > 0;
     }
 }

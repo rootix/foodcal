@@ -2,5 +2,5 @@
   functions = "functions/"
 [dev]
   command = "npm run serve"
-  port = 4200
+  targetPort = 4200
   functionsPort = 34567
