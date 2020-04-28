@@ -5,7 +5,6 @@
         </button>
     </clr-dg-action-bar>
     <clr-dg-column [clrDgField]="'name'" [clrDgSortOrder]="ascSort">Rezept</clr-dg-column>
-    <clr-dg-column>URL</clr-dg-column>
     <clr-dg-column [clrDgSortBy]="'lastPreparation'">Letzte Zubereitung</clr-dg-column>
     <clr-dg-column
         >Tags
@@ -14,9 +13,9 @@
     <clr-dg-column class="action-column"></clr-dg-column>
 
     <clr-dg-row *clrDgItems="let recipe of recipes">
-        <clr-dg-cell>{{ recipe.name }}</clr-dg-cell>
         <clr-dg-cell
-            ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a></clr-dg-cell
+            ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
+            <span *ngIf="!recipe.url">{{ recipe.name }}</span></clr-dg-cell
         >
         <clr-dg-cell>{{ recipe.lastPreparation | date }}</clr-dg-cell>
         <clr-dg-cell

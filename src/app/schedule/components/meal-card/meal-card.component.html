@@ -1,7 +1,11 @@
 <div class="card" [class.empty]="isNew">
     <div class="card-block">
         <span class="card-tag">{{ meal.type === 0 ? 'Mittag' : 'Abend' }}</span>
-        <h3 class="card-title">{{ meal.recipe?.name || 'Kein Menü definiert' }}</h3>
+        <h3 class="card-title">
+            <span *ngIf="!meal.recipe">Kein Menü definiert</span>
+            <a *ngIf="meal.recipe?.url" href="{{ meal.recipe.url }}" target="_blank">{{ meal.recipe.name }}</a>
+            <span *ngIf="meal.recipe && !meal.recipe.url">{{ meal.recipe.name }}</span>
+        </h3>
         <p class="card-text" *ngIf="meal.notes">
             {{ meal.notes }}
         </p>

@@ -25,6 +25,7 @@ export class ScheduleApiService {
                                 recipe {
                                     _id
                                     name
+                                    url
                                 }
                                 type
                                 notes
@@ -114,7 +115,7 @@ export class ScheduleApiService {
         return {
             _id: graphQlMeal._id,
             date: startOfDay(new Date(graphQlMeal.date)),
-            recipe: { _id: graphQlMeal.recipe._id, name: graphQlMeal.recipe.name },
+            recipe: { _id: graphQlMeal.recipe._id, name: graphQlMeal.recipe.name, url: graphQlMeal.recipe.url },
             type: MealType[graphQlMeal.type as string],
             notes: graphQlMeal.notes
         };
