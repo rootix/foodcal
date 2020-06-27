@@ -1,3 +1,5 @@
+import '@angular/common/locales/global/de-CH';
+
 import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';

@@ -13,9 +13,6 @@
             "root": "",
             "sourceRoot": "src",
             "prefix": "fc",
-            "i18n": {
-                "sourceLocale": "de-CH"
-            },
             "architect": {
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
@@ -26,7 +23,6 @@
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.app.json",
                         "aot": true,
-                        "localize": true,
                         "assets": ["src/favicon.ico", "src/assets", "src/_redirects"],
                         "styles": ["node_modules/@clr/icons/clr-icons.min.css", "src/styles/main.scss"],
                         "scripts": [
