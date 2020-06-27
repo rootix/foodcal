@@ -68,7 +68,7 @@ export class RecipeState {
                 context.setState(
                     patch({
                         recipes: updateItem(
-                            r => r._id === recipe._id,
+                            (r: Recipe) => r._id === recipe._id,
                             patch(Object.assign({}, recipe, { _ts: timestamp } as Recipe))
                         )
                     })
