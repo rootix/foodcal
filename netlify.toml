@@ -1,6 +1,2 @@
 [build]
   functions = "functions/"
-[dev]
-  command = "npm run serve"
-  targetPort = 4200
-  functionsPort = 34567
