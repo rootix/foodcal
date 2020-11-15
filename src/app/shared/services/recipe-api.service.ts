@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Apollo, gql } from 'apollo-angular';
 import { isFuture, max, startOfDay } from 'date-fns';
-import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 
 import { Recipe } from '../models';

@@ -4,12 +4,11 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { ApolloModule } from 'apollo-angular';
 
 import { ConfirmDialogComponent } from './dialog/confirm-dialog/confirm-dialog.component';
 import { DayNamePipe } from './pipes/day-name.pipe';
 
-const RELAY_IMPORTS = [CommonModule, ClarityModule, PortalModule, ApolloModule, ReactiveFormsModule, NgSelectModule];
+const RELAY_IMPORTS = [CommonModule, ClarityModule, PortalModule, ReactiveFormsModule, NgSelectModule];
 
 @NgModule({
     declarations: [ConfirmDialogComponent, DayNamePipe],

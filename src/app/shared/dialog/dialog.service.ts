@@ -1,4 +1,4 @@
-import { ComponentPortal, DomPortalOutlet, PortalInjector } from '@angular/cdk/portal';
+import { ComponentPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import { ApplicationRef, ComponentFactoryResolver, Inject, Injectable, Injector } from '@angular/core';
 import { from, merge, Observable, ObservableInput, of } from 'rxjs';
@@ -70,10 +70,12 @@ export class DialogService {
         });
     }
 
-    private createConfirmDialogInjector(data): PortalInjector {
-        const injectorTokens = new WeakMap<{}, {}>([[CONFIRM_DIALOG_OPTIONS, data]]);
-
-        return new PortalInjector(this.injector, injectorTokens);
+    private createConfirmDialogInjector(data): Injector {
+        return Injector.create({
+            name: 'ConfirmDialogInjector',
+            providers: [{ provide: CONFIRM_DIALOG_OPTIONS, useValue: data }],
+            parent: this.injector,
+        });
     }
 
     private createPortalHost(): DomPortalOutlet {
