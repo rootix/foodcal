@@ -10,9 +10,9 @@ const routes: Routes = [
     {
         path: 'recipes',
         loadChildren: () => import('./recipes/recipes.module').then(m => m.RecipesModule),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
     },
-    { path: '', redirectTo: 'schedule', pathMatch: 'full' }
+    { path: '', redirectTo: 'schedule', pathMatch: 'full' },
 ];
 
-export const AppRoutes = RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' });
+export const APP_ROUTES = RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' });

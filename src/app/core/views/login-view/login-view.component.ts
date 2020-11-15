@@ -8,7 +8,7 @@ import { Login } from 'src/app/shared/state/auth';
 @Component({
     selector: 'fc-login-view',
     templateUrl: './login-view.component.html',
-    styleUrls: ['./login-view.component.scss']
+    styleUrls: ['./login-view.component.scss'],
 })
 export class LoginViewComponent {
     @ViewChild(ClrForm) clarityForm: ClrForm;
@@ -17,7 +17,7 @@ export class LoginViewComponent {
 
     readonly form = new FormGroup({
         username: new FormControl(null, Validators.required),
-        password: new FormControl(null, Validators.required)
+        password: new FormControl(null, Validators.required),
     });
 
     constructor(private store: Store, private router: Router) {}

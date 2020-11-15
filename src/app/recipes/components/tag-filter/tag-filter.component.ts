@@ -8,7 +8,7 @@ import { RecipeState } from 'src/app/shared/state/recipe';
 @Component({
     selector: 'fc-tag-filter',
     templateUrl: './tag-filter.component.html',
-    styleUrls: ['./tag-filter.component.scss']
+    styleUrls: ['./tag-filter.component.scss'],
 })
 export class TagFilterComponent implements ClrDatagridFilterInterface<Recipe> {
     @Select(RecipeState.getTags) tags$: Observable<string[]>;

@@ -5,7 +5,7 @@ import { Week } from '../../models/schedule.model';
 @Component({
     selector: 'fc-week-selector',
     templateUrl: './week-selector.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeekSelectorComponent {
     @Input() week: Week;

@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
     selector: 'fc-root',
     template: `
         <fc-shell></fc-shell>
-    `
+    `,
 })
 export class AppComponent {}

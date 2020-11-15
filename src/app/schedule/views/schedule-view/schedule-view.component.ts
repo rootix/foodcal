@@ -9,7 +9,7 @@ import { ScheduleState } from '../../state/schedule.state';
 
 @Component({
     selector: 'fc-schedule-view',
-    templateUrl: './schedule-view.component.html'
+    templateUrl: './schedule-view.component.html',
 })
 export class ScheduleViewComponent implements OnInit {
     @Select(ScheduleState.week) public week$: Observable<Week>;

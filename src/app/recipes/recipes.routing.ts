@@ -4,4 +4,4 @@ import { RecipesViewComponent } from './views/recipes-view/recipes-view.componen
 
 const routes: Routes = [{ path: '', component: RecipesViewComponent }];
 
-export const RecipesRoutes = RouterModule.forChild(routes);
+export const RECIPES_ROUTES = RouterModule.forChild(routes);

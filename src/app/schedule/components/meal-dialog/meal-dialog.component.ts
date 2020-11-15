@@ -11,7 +11,7 @@ import { Meal } from '../../models/schedule.model';
 
 @Component({
     selector: 'fc-meal-dialog',
-    templateUrl: './meal-dialog.component.html'
+    templateUrl: './meal-dialog.component.html',
 })
 export class MealDialogComponent implements OnInit {
     @ViewChild(ClrForm) clarityForm: ClrForm;
@@ -28,7 +28,7 @@ export class MealDialogComponent implements OnInit {
         date: new FormControl(null, Validators.required),
         type: new FormControl(null, Validators.required),
         recipe: new FormControl(null, Validators.required),
-        notes: new FormControl()
+        notes: new FormControl(),
     });
 
     submitState: ClrLoadingState;

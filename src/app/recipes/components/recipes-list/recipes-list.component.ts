@@ -5,7 +5,7 @@ import { Recipe } from 'src/app/shared/models';
 @Component({
     selector: 'fc-recipes-list',
     templateUrl: './recipes-list.component.html',
-    styleUrls: ['./recipes-list.component.scss']
+    styleUrls: ['./recipes-list.component.scss'],
 })
 export class RecipesListComponent {
     @Input() recipes: Recipe[];

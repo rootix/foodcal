@@ -7,11 +7,11 @@ export interface ConfirmDialogOptions {
     confirmButtonClass?: string;
 }
 
-export const CONFIRM_DIALOG_OPTIONS = new InjectionToken<{}>('ConfirmDialogOptions');
+export const CONFIRM_DIALOG_OPTIONS = new InjectionToken<unknown>('ConfirmDialogOptions');
 
 @Component({
     selector: 'fc-confirm-dialog',
-    templateUrl: './confirm-dialog.component.html'
+    templateUrl: './confirm-dialog.component.html',
 })
 export class ConfirmDialogComponent {
     @Input()

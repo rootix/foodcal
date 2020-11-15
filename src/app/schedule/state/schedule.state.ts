@@ -29,8 +29,8 @@ interface ScheduleStateModel {
     defaults: {
         loading: false,
         week: null,
-        mealsOfWeek: undefined
-    }
+        mealsOfWeek: undefined,
+    },
 })
 @Injectable()
 export class ScheduleState implements NgxsOnInit {
@@ -57,19 +57,19 @@ export class ScheduleState implements NgxsOnInit {
         interval.forEach((date: Date) => {
             const lunch = existingMeals.find(m => m.date.getTime() === date.getTime() && m.type === MealType.Lunch) || {
                 date,
-                type: MealType.Lunch
+                type: MealType.Lunch,
             };
 
             const dinner = existingMeals.find(
                 m => m.date.getTime() === date.getTime() && m.type === MealType.Dinner
             ) || {
                 date,
-                type: MealType.Dinner
+                type: MealType.Dinner,
             };
 
             const day: MealsPerDay = {
                 date,
-                meals: [lunch, dinner]
+                meals: [lunch, dinner],
             };
 
             mealsPerDay.push(day);
@@ -101,7 +101,7 @@ export class ScheduleState implements NgxsOnInit {
                         mealsOfWeek: updateItem<Meal>(
                             m => m._id === meal._id,
                             patch(Object.assign({}, meal, { _ts: timestamp } as Meal))
-                        )
+                        ),
                     })
                 )
             )
@@ -175,7 +175,7 @@ export class ScheduleState implements NgxsOnInit {
             startDate: monday,
             endDate: sunday,
             calendarWeek,
-            isCurrentWeek
+            isCurrentWeek,
         } as Week;
     }
 

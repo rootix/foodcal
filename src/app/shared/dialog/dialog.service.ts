@@ -11,7 +11,7 @@ import {
 } from './confirm-dialog/confirm-dialog.component';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class DialogService {
     private document: Document;
@@ -37,7 +37,7 @@ export class DialogService {
             title,
             message,
             confirmLabel: confirmLabel || 'Ja',
-            confirmButtonClass
+            confirmButtonClass,
         };
 
         const injector = this.createConfirmDialogInjector(confirmDialogOptions);
@@ -55,7 +55,7 @@ export class DialogService {
                             finalize(() => (dialogRef.instance.busy = false))
                         );
                     })
-                )
+                ),
             ])
                 .pipe(
                     mergeAll(),

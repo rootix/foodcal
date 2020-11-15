@@ -4,7 +4,7 @@ import { isToday } from 'date-fns';
 @Component({
     selector: 'fc-day-container',
     templateUrl: './day-container.component.html',
-    styleUrls: ['./day-container.component.scss']
+    styleUrls: ['./day-container.component.scss'],
 })
 export class DayContainerComponent {
     @Input() date: Date;

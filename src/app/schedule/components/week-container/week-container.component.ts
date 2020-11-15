@@ -9,7 +9,7 @@ import { MealDialogComponent } from '../meal-dialog/meal-dialog.component';
 @Component({
     selector: 'fc-week-container',
     templateUrl: './week-container.component.html',
-    styleUrls: ['./week-container.component.scss']
+    styleUrls: ['./week-container.component.scss'],
 })
 export class WeekContainerComponent {
     @Input() mealsOfWeek: MealsPerDay[];

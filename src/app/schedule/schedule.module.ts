@@ -18,7 +18,7 @@ import { ScheduleViewComponent } from './views/schedule-view/schedule-view.compo
         WeekSelectorComponent,
         DayContainerComponent,
         WeekContainerComponent,
-        MealDialogComponent
-    ]
+        MealDialogComponent,
+    ],
 })
 export class ScheduleModule {}

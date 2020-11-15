@@ -31,7 +31,7 @@ export class RecipeApiService {
                             }
                         }
                     }
-                `
+                `,
             })
             .pipe(
                 map(response => response.data.allRecipesByDeletedFlag.data),
@@ -60,8 +60,8 @@ export class RecipeApiService {
                     url: recipe.url,
                     note: recipe.note,
                     deleted: recipe.deleted || false,
-                    tags: recipe.tags || []
-                }
+                    tags: recipe.tags || [],
+                },
             })
             .pipe(map(response => response.data.createRecipe._id));
     }
@@ -92,8 +92,8 @@ export class RecipeApiService {
                     url: recipe.url,
                     note: recipe.note,
                     deleted: recipe.deleted || false,
-                    tags: recipe.tags || []
-                }
+                    tags: recipe.tags || [],
+                },
             })
             .pipe(map(response => response.data.updateRecipe._ts));
     }
@@ -106,7 +106,7 @@ export class RecipeApiService {
             lastPreparation: this.getNewestNonFutureDateFromGraphQlDates(graphQlRecipe.meals.data.map(d => d.date)),
             note: graphQlRecipe.note,
             tags: graphQlRecipe.tags,
-            deleted: graphQlRecipe.deleted
+            deleted: graphQlRecipe.deleted,
         };
     }
 

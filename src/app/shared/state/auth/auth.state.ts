@@ -13,13 +13,11 @@ export interface AuthStateModel {
 @State<AuthStateModel>({
     name: 'auth',
     defaults: {
-        token: null
-    }
+        token: null,
+    },
 })
 @Injectable()
 export class AuthState {
-    constructor(private authService: AuthService) {}
-
     @Selector()
     static token(state: AuthStateModel): string | null {
         return state.token;
@@ -48,4 +46,6 @@ export class AuthState {
             })
         );
     }
+
+    constructor(private authService: AuthService) {}
 }
