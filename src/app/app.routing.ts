@@ -15,4 +15,4 @@ const routes: Routes = [
     { path: '', redirectTo: 'schedule', pathMatch: 'full' }
 ];
 
-export const AppRoutes = RouterModule.forRoot(routes);
+export const AppRoutes = RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' });

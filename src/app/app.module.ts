@@ -4,15 +4,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ApolloLink, InMemoryCache } from '@apollo/client/core';
+import { setContext } from '@apollo/client/link/context';
 import { ClarityModule } from '@clr/angular';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { APOLLO_OPTIONS } from 'apollo-angular';
-import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloLink } from 'apollo-link';
-import { setContext } from 'apollo-link-context';
+import { HttpLink } from 'apollo-angular/http';
 import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
@@ -67,7 +66,6 @@ export function provideApollo(httpLink: HttpLink) {
         ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
-        HttpLinkModule,
         NgxsModule.forRoot([AuthState, RecipeState], {
             developmentMode: !environment.production,
             selectorOptions: { injectContainerState: false, suppressErrors: false }
