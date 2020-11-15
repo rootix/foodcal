@@ -13,6 +13,6 @@ const RELAY_IMPORTS = [CommonModule, ClarityModule, PortalModule, ReactiveFormsM
 @NgModule({
     declarations: [ConfirmDialogComponent, DayNamePipe],
     imports: [...RELAY_IMPORTS],
-    exports: [...RELAY_IMPORTS, DayNamePipe]
+    exports: [...RELAY_IMPORTS, DayNamePipe],
 })
 export class SharedModule {}

@@ -15,7 +15,7 @@ import { HttpLink } from 'apollo-angular/http';
 import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
-import { AppRoutes } from './app.routing';
+import { APP_ROUTES } from './app.routing';
 import { CoreModule } from './core/core.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthState } from './shared/state/auth';
@@ -23,28 +23,30 @@ import { RecipeState } from './shared/state/recipe/recipe.state';
 
 const uri = 'https://graphql.fauna.com/graphql';
 
-export function provideApollo(httpLink: HttpLink) {
+const provideApolloFn = (httpLink: HttpLink) => {
     const defaultOptions = {
         watchQuery: {
             fetchPolicy: 'no-cache',
-            errorPolicy: 'ignore'
+            errorPolicy: 'ignore',
         },
         query: {
             fetchPolicy: 'no-cache',
-            errorPolicy: 'all'
-        }
+            errorPolicy: 'all',
+        },
     };
 
     const basic = setContext((operation, context) => ({
         headers: {
-            Accept: 'charset=utf-8'
-        }
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            Accept: 'charset=utf-8',
+        },
     }));
 
     const auth = setContext((operation, context) => ({
         headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth.token'))}`
-        }
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('auth.token'))}`,
+        },
     }));
 
     const link = ApolloLink.from([basic, auth, httpLink.create({ uri })]);
@@ -53,37 +55,37 @@ export function provideApollo(httpLink: HttpLink) {
     return {
         link,
         cache,
-        defaultOptions
+        defaultOptions,
     };
-}
+};
 
 @NgModule({
     declarations: [AppComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
-        AppRoutes,
+        APP_ROUTES,
         ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
         NgxsModule.forRoot([AuthState, RecipeState], {
             developmentMode: !environment.production,
-            selectorOptions: { injectContainerState: false, suppressErrors: false }
+            selectorOptions: { injectContainerState: false, suppressErrors: false },
         }),
         NgxsStoragePluginModule.forRoot({
-            key: 'auth.token'
+            key: 'auth.token',
         }),
         ScheduleModule,
-        NgxsReduxDevtoolsPluginModule.forRoot()
+        NgxsReduxDevtoolsPluginModule.forRoot(),
     ],
     bootstrap: [AppComponent],
     providers: [
         { provide: LOCALE_ID, useValue: 'de-CH' },
         {
             provide: APOLLO_OPTIONS,
-            useFactory: provideApollo,
-            deps: [HttpLink]
-        }
-    ]
+            useFactory: provideApolloFn,
+            deps: [HttpLink],
+        },
+    ],
 })
 export class AppModule {}

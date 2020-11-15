@@ -9,7 +9,7 @@ import { RecipeState } from 'src/app/shared/state/recipe';
 
 @Component({
     selector: 'fc-recipe-dialog',
-    templateUrl: './recipe-dialog.component.html'
+    templateUrl: './recipe-dialog.component.html',
 })
 export class RecipeDialogComponent {
     @ViewChild(ClrForm) clarityForm: ClrForm;
@@ -24,7 +24,7 @@ export class RecipeDialogComponent {
         name: new FormControl(null, Validators.required),
         url: new FormControl(),
         tags: new FormControl(),
-        note: new FormControl()
+        note: new FormControl(),
     });
 
     submitState: ClrLoadingState;

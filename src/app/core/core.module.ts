@@ -8,6 +8,6 @@ import { LoginViewComponent } from './views/login-view/login-view.component';
 @NgModule({
     imports: [SharedModule, RouterModule],
     declarations: [ShellComponent, LoginViewComponent],
-    exports: [ShellComponent, LoginViewComponent]
+    exports: [ShellComponent, LoginViewComponent],
 })
 export class CoreModule {}

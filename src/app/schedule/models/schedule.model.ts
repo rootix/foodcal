@@ -2,7 +2,7 @@ import { Recipe } from 'src/app/shared/models';
 
 export enum MealType {
     Lunch,
-    Dinner
+    Dinner,
 }
 export interface Meal {
     _id?: string;

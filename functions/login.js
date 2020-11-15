@@ -2,7 +2,7 @@ const faunadb = require('faunadb');
 
 const q = faunadb.query;
 const client = new faunadb.Client({
-    secret: process.env.FAUNADB_SECRET
+    secret: process.env.FAUNADB_SECRET,
 });
 
 exports.handler = (event, context, callback) => {
@@ -16,14 +16,14 @@ exports.handler = (event, context, callback) => {
         .then(response => {
             return callback(null, {
                 statusCode: 200,
-                body: JSON.stringify(response.secret)
+                body: JSON.stringify(response.secret),
             });
         })
         .catch(error => {
             console.log(`Login failed for user ${username}`, error.message);
             return callback(null, {
                 statusCode: 401,
-                body: 'Login failed'
+                body: 'Login failed',
             });
         });
 };

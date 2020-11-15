@@ -3,13 +3,19 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { DialogService } from 'src/app/shared/dialog/dialog.service';
 import { Recipe } from 'src/app/shared/models';
-import { CreateRecipe, DeleteRecipe, EnsureLoadAllRecipes, RecipeState, UpdateRecipe } from 'src/app/shared/state/recipe';
+import {
+    CreateRecipe,
+    DeleteRecipe,
+    EnsureLoadAllRecipes,
+    RecipeState,
+    UpdateRecipe,
+} from 'src/app/shared/state/recipe';
 
 import { RecipeDialogComponent } from '../../components/recipe-dialog/recipe-dialog.component';
 
 @Component({
     selector: 'fc-recipes-view',
-    templateUrl: './recipes-view.component.html'
+    templateUrl: './recipes-view.component.html',
 })
 export class RecipesViewComponent implements OnInit {
     @ViewChild(RecipeDialogComponent) dialog: RecipeDialogComponent;

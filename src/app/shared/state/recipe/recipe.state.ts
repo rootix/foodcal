@@ -28,8 +28,8 @@ interface RecipeStateModel {
         loaded: false,
         loading: false,
         recipes: [],
-        tags: []
-    }
+        tags: [],
+    },
 })
 @Injectable()
 export class RecipeState {
@@ -70,7 +70,7 @@ export class RecipeState {
                         recipes: updateItem(
                             (r: Recipe) => r._id === recipe._id,
                             patch(Object.assign({}, recipe, { _ts: timestamp } as Recipe))
-                        )
+                        ),
                     })
                 )
             ),

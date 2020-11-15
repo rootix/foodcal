@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { Meal, MealType } from '../models/schedule.model';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ScheduleApiService {
     constructor(private apollo: Apollo) {}
@@ -35,8 +35,8 @@ export class ScheduleApiService {
                 variables: {
                     from: format(startDate, 'yyyy-MM-dd'),
                     to: format(endDate, 'yyyy-MM-dd'),
-                    size: maxNumberOfMeals
-                }
+                    size: maxNumberOfMeals,
+                },
             })
             .pipe(
                 map(response => response.data.allMealsInDateRange.data),
@@ -60,8 +60,8 @@ export class ScheduleApiService {
                     date: format(meal.date, 'yyyy-MM-dd'),
                     type: MealType[meal.type],
                     recipe: { connect: meal.recipe._id },
-                    notes: meal.notes
-                }
+                    notes: meal.notes,
+                },
             })
             .pipe(map(response => response.data.createMeal._id));
     }
@@ -87,8 +87,8 @@ export class ScheduleApiService {
                     date: format(meal.date, 'yyyy-MM-dd'),
                     type: MealType[meal.type],
                     recipe: { connect: meal.recipe._id },
-                    notes: meal.notes
-                }
+                    notes: meal.notes,
+                },
             })
             .pipe(map(response => response.data.updateMeal._ts));
     }
@@ -104,8 +104,8 @@ export class ScheduleApiService {
                     }
                 `,
                 variables: {
-                    id
-                }
+                    id,
+                },
             })
             .pipe(map(response => response.data.deleteMeal._id));
     }
@@ -116,7 +116,7 @@ export class ScheduleApiService {
             date: startOfDay(new Date(graphQlMeal.date)),
             recipe: { _id: graphQlMeal.recipe._id, name: graphQlMeal.recipe.name, url: graphQlMeal.recipe.url },
             type: MealType[graphQlMeal.type as string],
-            notes: graphQlMeal.notes
+            notes: graphQlMeal.notes,
         };
     }
 }

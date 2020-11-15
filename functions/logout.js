@@ -9,20 +9,20 @@ exports.handler = (event, context, callback) => {
 
     const q = faunadb.query;
     const client = new faunadb.Client({
-        secret: token
+        secret: token,
     });
     client
         .query(q.Logout(false))
         .then(_ => {
             return callback(null, {
                 statusCode: 200,
-                body: 'true'
+                body: 'true',
             });
         })
         .catch(_ => {
             return callback(null, {
                 statusCode: 200,
-                body: 'false'
+                body: 'false',
             });
         });
 };
