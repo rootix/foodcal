@@ -1,9 +1,0 @@
-<h1>Rezepte</h1>
-<fc-recipes-list
-    [loading]="loading$ | async"
-    [recipes]="recipes$ | async"
-    (createRecipe)="onCreateRecipe()"
-    (editRecipe)="onEditRecipe($event)"
-    (deleteRecipe)="onDeleteRecipe($event)"
-></fc-recipes-list>
-<fc-recipe-dialog></fc-recipe-dialog>
