@@ -1,5 +1,4 @@
 import { RouterModule, Routes } from '@angular/router';
-
 import { LoginViewComponent } from './core/views/login-view/login-view.component';
 import { SCHEDULE_ROUTES } from './schedule/schedule.routing';
 import { AuthGuard } from './shared/guards/auth.guard';

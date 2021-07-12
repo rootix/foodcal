@@ -1,4 +1,4 @@
 {
-    "typescriptHero.imports.organizeOnSave": true,
+    "editor.codeActionsOnSave": ["source.organizeImports"],
     "editor.formatOnSave": true
 }

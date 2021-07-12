@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { differenceInCalendarDays, format, startOfDay } from 'date-fns';
 import { map } from 'rxjs/operators';
-
 import { Meal, MealType } from '../models/schedule.model';
 
 @Injectable({

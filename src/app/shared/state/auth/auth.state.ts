@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
 import { AuthService } from '../../services/auth.service';
 import { Login, Logout } from './auth.actions';
 

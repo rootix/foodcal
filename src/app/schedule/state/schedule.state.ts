@@ -3,7 +3,6 @@ import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { addDays, eachDayOfInterval, getWeek, startOfWeek } from 'date-fns';
 import { mergeMap, switchMap, tap } from 'rxjs/operators';
-
 import { Meal, MealsPerDay, MealType, Week } from '../models/schedule.model';
 import { ScheduleApiService } from '../services/schedule-api.service';
 import {

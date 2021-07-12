@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Recipe } from 'src/app/shared/models';
 import { RecipeState } from 'src/app/shared/state/recipe';
 
@@ -42,7 +42,7 @@ export class RecipesListComponent {
     }
 
     filterByTags(tags: string[], recipe: Recipe) {
-        return tags.some(tag => recipe.tags.indexOf(tag) != -1);
+        return tags.some(tag => recipe.tags.indexOf(tag) !== -1);
     }
 
     onExpandChange(id: number, checked: boolean): void {

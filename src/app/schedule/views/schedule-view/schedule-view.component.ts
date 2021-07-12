@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-
 import { MealsPerDay, Week } from '../../models/schedule.model';
 import { EnsureInitializeSchedule, SwitchToNextWeek, SwitchToPreviousWeek } from '../../state/schedule.actions';
 import { ScheduleState } from '../../state/schedule.state';

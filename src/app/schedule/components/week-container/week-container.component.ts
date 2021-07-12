@@ -1,7 +1,6 @@
 import { Component, HostBinding, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { NzModalService } from 'ng-zorro-antd/modal';
-
 import { Meal, MealsPerDay } from '../../models/schedule.model';
 import { CreateMeal, DeleteMeal, UpdateMeal } from '../../state/schedule.actions';
 import { MealDialogComponent } from '../meal-dialog/meal-dialog.component';

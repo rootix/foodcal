@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { finalize, map, withLatestFrom } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { Recipe } from 'src/app/shared/models';
-import { CreateRecipe, EnsureLoadAllRecipes, RecipeState } from 'src/app/shared/state/recipe';
+import { EnsureLoadAllRecipes, RecipeState } from 'src/app/shared/state/recipe';
 import { Meal } from '../../models/schedule.model';
 
 @Component({
@@ -68,6 +68,6 @@ export class MealDialogComponent implements OnInit {
     }
 
     recipeCompareFn(first: Recipe, second: Recipe) {
-        return first && second && first._id == second._id;
+        return first && second && first._id === second._id;
     }
 }

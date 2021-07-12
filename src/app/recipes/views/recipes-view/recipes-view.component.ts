@@ -10,7 +10,6 @@ import {
     RecipeState,
     UpdateRecipe,
 } from 'src/app/shared/state/recipe';
-
 import { RecipeDialogComponent } from '../../components/recipe-dialog/recipe-dialog.component';
 
 @Component({

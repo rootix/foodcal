@@ -1,6 +1,7 @@
-import '@angular/common/locales/global/de-CH';
-
+import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import de from '@angular/common/locales/de';
+import '@angular/common/locales/global/de-CH';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,18 +12,14 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
+import { de_DE, NZ_I18N } from 'ng-zorro-antd/i18n';
 import { environment } from 'src/environments/environment';
-
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routing';
 import { CoreModule } from './core/core.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthState } from './shared/state/auth';
 import { RecipeState } from './shared/state/recipe/recipe.state';
-import { NZ_I18N } from 'ng-zorro-antd/i18n';
-import { de_DE } from 'ng-zorro-antd/i18n';
-import { registerLocaleData } from '@angular/common';
-import de from '@angular/common/locales/de';
 
 registerLocaleData(de);
 

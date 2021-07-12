@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { isFuture, max, startOfDay } from 'date-fns';
 import { map } from 'rxjs/operators';
-
 import { Recipe } from '../models';
 
 @Injectable({ providedIn: 'root' })
