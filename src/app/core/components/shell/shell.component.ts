@@ -7,6 +7,7 @@ import { AuthState, Logout } from 'src/app/shared/state/auth';
 @Component({
     selector: 'fc-shell',
     templateUrl: './shell.component.html',
+    styleUrls: ['./shell.component.scss'],
 })
 export class ShellComponent implements OnInit {
     @Select(AuthState.isAuthenticated) isAuthenticated$: Observable<boolean>;

@@ -2,35 +2,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 5rem;
 }
 
 .login-form {
-    margin-top: -1.2rem;
-}
-
-.alert-text {
-    width: auto;
-    flex-basis: auto;
-}
-
-.login-form-card {
-    width: 16.666rem;
-
-    ::ng-deep {
-        .clr-input-group {
-            width: 100%;
-            max-width: unset;
-        }
-        .clr-error .clr-input-group input {
-            width: 90%;
-        }
-        .clr-control-container,
-        .clr-control-container input {
-            width: 100%;
-        }
-
-        .card-block .btn {
-            margin-top: 1rem;
-        }
-    }
+    width: 20rem;
 }

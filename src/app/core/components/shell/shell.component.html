@@ -1,26 +1,30 @@
-<clr-main-container>
-    <clr-header class="header-6">
-        <div class="branding">
+<nz-layout>
+    <nz-sider nzCollapsible nzBreakpoint="lg" [nzCollapsedWidth]="0">
+        <div class="logo">
             <a [routerLink]="'/'">
                 <span class="title"><strong>Food</strong>cal</span>
             </a>
         </div>
-        <div class="header-nav" [clr-nav-level]="1" *ngIf="isAuthenticated$ | async">
-            <a class="nav-link" routerLink="/schedule" routerLinkActive="active"
-                ><span class="nav-text">Wochenplan</span></a
-            >
-            <a class="nav-link" routerLink="/recipes" routerLinkActive="active"
-                ><span class="nav-text">Rezepte</span></a
-            >
-        </div>
-        <div class="header-actions" *ngIf="isAuthenticated$ | async">
-            <a href="javascript:void(0);" (click)="onLogout()" class="nav-link nav-icon">
-                <clr-icon shape="logout"></clr-icon>
-            </a></div
-    ></clr-header>
-    <div class="content-container">
-        <div class="content-area">
-            <router-outlet></router-outlet>
-        </div>
-    </div>
-</clr-main-container>
+        <ul nz-menu nzTheme="dark" nzMode="inline" *ngIf="isAuthenticated$ | async">
+            <li *ngIf="isAuthenticated$ | async" nz-menu-item nzMatchRouter>
+                <a routerLink="/schedule">Wochenplan</a>
+            </li>
+            <li *ngIf="isAuthenticated$ | async" nz-menu-item nzMatchRouter>
+                <a routerLink="/recipes"><span class="nav-text">Rezepte</span> </a>
+            </li>
+            <li *ngIf="isAuthenticated$ | async" nz-menu-item style="margin-top: 4rem;">
+                <a href="javascript:void(0);" (click)="onLogout()" class="nav-link nav-icon">
+                    <i nz-icon nzType="logout" style="color: #fff"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </nz-sider>
+    <nz-layout>
+        <nz-content>
+            <div class="inner-content">
+                <router-outlet></router-outlet>
+            </div>
+        </nz-content>
+        <nz-footer> Made with <i nz-icon nzType="heart" nzTheme="fill"></i></nz-footer>
+    </nz-layout>
+</nz-layout>

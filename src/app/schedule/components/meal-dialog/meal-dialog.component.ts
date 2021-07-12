@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ClrForm, ClrLoadingState } from '@clr/angular';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { finalize, map, withLatestFrom } from 'rxjs/operators';
 import { Recipe } from 'src/app/shared/models';
 import { CreateRecipe, EnsureLoadAllRecipes, RecipeState } from 'src/app/shared/state/recipe';
-
 import { Meal } from '../../models/schedule.model';
 
 @Component({
@@ -14,11 +12,8 @@ import { Meal } from '../../models/schedule.model';
     templateUrl: './meal-dialog.component.html',
 })
 export class MealDialogComponent implements OnInit {
-    @ViewChild(ClrForm) clarityForm: ClrForm;
     @Select(RecipeState.getAllRecipes) allRecipes$: Observable<Recipe[]>;
     @Select(RecipeState.loading) allRecipesLoading$: Observable<boolean>;
-
-    loading$: Observable<boolean>;
 
     isOpen = false;
     isNew = false;
@@ -31,16 +26,11 @@ export class MealDialogComponent implements OnInit {
         notes: new FormControl(),
     });
 
-    submitState: ClrLoadingState;
+    submitLoading: boolean;
 
     private submitHandler: (meal: Meal) => Observable<void>;
-    private createRecipeLoadingSubject = new BehaviorSubject(false);
 
-    constructor(private store: Store) {
-        this.loading$ = combineLatest([this.allRecipesLoading$, this.createRecipeLoadingSubject]).pipe(
-            map(([allRecipesLoading, createRecipeLoading]) => allRecipesLoading || createRecipeLoading)
-        );
-    }
+    constructor(private store: Store) {}
 
     ngOnInit() {
         this.store.dispatch(new EnsureLoadAllRecipes());
@@ -57,29 +47,27 @@ export class MealDialogComponent implements OnInit {
         this.isOpen = true;
     }
 
-    onCreateRecipe = (recipeName: string) => {
-        this.createRecipeLoadingSubject.next(true);
-        return this.store
-            .dispatch(new CreateRecipe({ name: recipeName }))
-            .pipe(
-                withLatestFrom(this.allRecipes$),
-                map(([_, allRecipes]) => allRecipes[allRecipes.length - 1]),
-                finalize(() => this.createRecipeLoadingSubject.next(false))
-            )
-            .toPromise();
-    };
-
     onSubmit() {
+        for (const i in this.form.controls) {
+            if (this.form.controls.hasOwnProperty(i)) {
+                this.form.controls[i].markAsDirty();
+                this.form.controls[i].updateValueAndValidity();
+            }
+        }
+
         if (this.form.invalid) {
-            this.clarityForm.markAsTouched();
             return;
         }
 
-        this.submitState = ClrLoadingState.LOADING;
+        this.submitLoading = true;
         this.submitHandler({ ...this.form.value })
-            .pipe(finalize(() => (this.submitState = ClrLoadingState.DEFAULT)))
+            .pipe(finalize(() => (this.submitLoading = false)))
             .subscribe(_ => {
                 this.isOpen = false;
             });
+    }
+
+    recipeCompareFn(first: Recipe, second: Recipe) {
+        return first && second && first._id == second._id;
     }
 }

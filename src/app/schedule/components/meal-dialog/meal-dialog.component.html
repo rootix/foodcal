@@ -1,34 +1,55 @@
-<clr-modal [(clrModalOpen)]="isOpen">
-    <h3 class="modal-title">{{ isNew ? 'Neues Menu' : 'Menu bearbeiten' }}</h3>
-    <div class="modal-body">
-        <form clrForm [formGroup]="form" class="full-width-form">
-            <clr-input-container>
-                <label>Rezept *</label>
-                <ng-select
-                    clrInput
-                    [items]="allRecipes$ | async"
-                    bindLabel="name"
-                    formControlName="recipe"
-                    [virtualScroll]="true"
-                    [addTag]="onCreateRecipe"
-                    addTagText="Neues Rezept hinzufügen"
-                    loadingText="Rezepte werden geladen"
-                    [loading]="loading$ | async"
-                    appendTo="body"
-                >
-                </ng-select>
-                <clr-control-error>Pflichtfeld</clr-control-error>
-            </clr-input-container>
-            <clr-textarea-container>
-                <label>Notizen</label>
-                <textarea clrTextarea formControlName="notes"></textarea>
-            </clr-textarea-container>
+<nz-modal
+    [(nzVisible)]="isOpen"
+    [nzTitle]="modalTitle"
+    [nzContent]="modalContent"
+    [nzFooter]="modalFooter"
+    (nzOnCancel)="isOpen = false"
+>
+    <ng-template #modalTitle>
+        {{ isNew ? 'Neues Menu' : 'Menu bearbeiten' }}
+    </ng-template>
+
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="recipe" nzRequired>
+                    Rezept
+                </nz-form-label>
+                <nz-form-control [nzSpan]="18" nzErrorTip="Pflichtfeld">
+                    <nz-select
+                        nzShowSearch
+                        nzAllowClear
+                        formControlName="recipe"
+                        [nzDropdownRender]="renderTemplate"
+                        [compareWith]="recipeCompareFn"
+                    >
+                        <nz-option
+                            *ngFor="let item of allRecipes$ | async"
+                            [nzLabel]="item.name"
+                            [nzValue]="item"
+                        ></nz-option>
+                    </nz-select>
+                    <ng-template #renderTemplate>
+                        <nz-spin *ngIf="allRecipesLoading$ | async"></nz-spin>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="notes">
+                    Notizen
+                </nz-form-label>
+                <nz-form-control [nzSpan]="18">
+                    <textarea rows="4" nz-input name="notes" id="notes" formControlName="notes"></textarea>
+                </nz-form-control>
+            </nz-form-item>
         </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="isOpen = false">Abbrechen</button>
-        <button type="button" class="btn btn-primary" (click)="onSubmit()" [clrLoading]="submitState">
+    </ng-template>
+    <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="isOpen = false">
+            Abbrechen
+        </button>
+        <button nz-button nzType="primary" (click)="onSubmit()" [nzLoading]="submitLoading">
             {{ isNew ? 'Erstellen' : 'Aktualisieren' }}
         </button>
-    </div>
-</clr-modal>
+    </ng-template>
+</nz-modal>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { DialogService } from 'src/app/shared/dialog/dialog.service';
 
 import { MealsPerDay, Week } from '../../models/schedule.model';
 import { EnsureInitializeSchedule, SwitchToNextWeek, SwitchToPreviousWeek } from '../../state/schedule.actions';
@@ -16,7 +15,7 @@ export class ScheduleViewComponent implements OnInit {
     @Select(ScheduleState.mealsOfWeek) public mealsOfWeek$: Observable<MealsPerDay[]>;
     @Select(ScheduleState.loading) public loading$: Observable<boolean>;
 
-    constructor(private store: Store, private dialogService: DialogService) {}
+    constructor(private store: Store) {}
 
     ngOnInit() {
         this.store.dispatch(new EnsureInitializeSchedule());

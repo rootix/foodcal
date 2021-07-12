@@ -1,11 +1,11 @@
-@import '../../../../styles/variables.scss';
-
-:host {
-    flex: 1 1 auto;
+:host::ng-deep {
+    .ant-card {
+        margin-top: 1.5rem;
+    }
 }
 
 .card-tag {
-    font-size: 0.4583333333333333rem;
+    font-size: 0.8em;
     letter-spacing: 0.03rem;
 }
 
@@ -23,19 +23,15 @@
     }
 }
 
-@media all and (min-width: $bp-small) {
+@media all and (min-width: 41.6666rem) {
     :host {
         margin: 0 0.25rem;
-        flex-basis: 50%;
+        width: 25rem;
     }
 
-    .card {
-        display: flex;
-        flex-direction: column;
-        height: calc(100% - 1.2rem);
-    }
-
-    .card-block {
-        flex: 1 1 auto;
+    :host::ng-deep {
+        .ant-card-body {
+            min-height: 8.6875rem;
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Component, HostBinding, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { DialogService } from 'src/app/shared/dialog/dialog.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 import { Meal, MealsPerDay } from '../../models/schedule.model';
 import { CreateMeal, DeleteMeal, UpdateMeal } from '../../state/schedule.actions';
@@ -16,7 +16,7 @@ export class WeekContainerComponent {
     @ViewChild(MealDialogComponent) dialog: MealDialogComponent;
     @HostBinding('class.loading') @Input() loading: boolean;
 
-    constructor(private store: Store, private dialogService: DialogService) {}
+    constructor(private store: Store, private modalService: NzModalService) {}
 
     onCreateMeal(meal: Meal) {
         this.dialog.open(meal, m => this.store.dispatch(new CreateMeal(m)));
@@ -27,14 +27,13 @@ export class WeekContainerComponent {
     }
 
     onDeleteMeal(meal: Meal) {
-        this.dialogService
-            .confirm(
-                'Bestätigen',
-                'Soll das Menu wirklich gelöscht werden?',
-                () => this.store.dispatch(new DeleteMeal(meal._id)),
-                'Löschen',
-                'btn-danger'
-            )
-            .subscribe();
+        this.modalService.confirm({
+            nzTitle: 'Bestätigen',
+            nzContent: 'Soll das Menu wirklich gelöscht werden?',
+            nzOkText: 'Löschen',
+            nzOnOk: () => this.store.dispatch(new DeleteMeal(meal._id)),
+            nzCancelText: 'Abbrechen',
+            nzOkDanger: true,
+        });
     }
 }

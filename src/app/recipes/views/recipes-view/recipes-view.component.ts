@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable } from 'rxjs';
-import { DialogService } from 'src/app/shared/dialog/dialog.service';
 import { Recipe } from 'src/app/shared/models';
 import {
     CreateRecipe,
@@ -23,7 +23,7 @@ export class RecipesViewComponent implements OnInit {
     @Select(RecipeState.getAllRecipes) recipes$: Observable<Recipe[]>;
     @Select(RecipeState.loading) loading$: Observable<boolean>;
 
-    constructor(private store: Store, private dialogService: DialogService) {}
+    constructor(private store: Store, private modalService: NzModalService) {}
 
     ngOnInit() {
         this.store.dispatch(new EnsureLoadAllRecipes());
@@ -38,14 +38,13 @@ export class RecipesViewComponent implements OnInit {
     }
 
     onDeleteRecipe(recipe: Recipe) {
-        this.dialogService
-            .confirm(
-                'Bestätigen',
-                'Soll das Rezept wirklich gelöscht werden?',
-                () => this.store.dispatch(new DeleteRecipe(recipe)),
-                'Löschen',
-                'btn-danger'
-            )
-            .subscribe();
+        this.modalService.confirm({
+            nzTitle: 'Bestätigen',
+            nzContent: 'Soll das Rezept wirklich gelöscht werden?',
+            nzOkText: 'Löschen',
+            nzOnOk: () => this.store.dispatch(new DeleteRecipe(recipe)),
+            nzCancelText: 'Abbrechen',
+            nzOkDanger: true,
+        });
     }
 }

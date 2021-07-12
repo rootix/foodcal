@@ -1,46 +1,63 @@
-<clr-datagrid [clrDgLoading]="loading">
-    <clr-dg-action-bar>
-        <button type="button" class="btn btn-sm btn-secondary" (click)="createRecipe.emit()">
-            <clr-icon shape="plus"></clr-icon> Neues Rezept
-        </button>
-    </clr-dg-action-bar>
-    <clr-dg-column [clrDgField]="'name'" [clrDgSortOrder]="ascSort">Rezept</clr-dg-column>
-    <clr-dg-column [clrDgSortBy]="'lastPreparation'">Letzte Zubereitung</clr-dg-column>
-    <clr-dg-column
-        >Tags
-        <clr-dg-filter [clrDgFilter]="tagFilter"> <fc-tag-filter #tagFilter></fc-tag-filter> </clr-dg-filter>
-    </clr-dg-column>
-    <clr-dg-column class="action-column"></clr-dg-column>
+<button nz-button nzType="primary" (click)="createRecipe.emit()" style="margin-bottom: 1rem">
+    <i nz-icon nzType="plus"></i>
+    Neues Rezept
+</button>
 
-    <clr-dg-row *clrDgItems="let recipe of recipes">
-        <clr-dg-cell
-            ><a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">{{ recipe.name }}</a>
-            <span *ngIf="!recipe.url">{{ recipe.name }}</span></clr-dg-cell
-        >
-        <clr-dg-cell>{{ recipe.lastPreparation | date }}</clr-dg-cell>
-        <clr-dg-cell
-            ><span class="label label-info" *ngFor="let tag of recipe.tags">{{ tag }}</span>
-        </clr-dg-cell>
-
-        <clr-dg-cell class="action-cell">
-            <button class="btn btn-icon btn-link btn-sm" (click)="editRecipe.emit(recipe)">
-                <clr-icon shape="pencil"></clr-icon>
-            </button>
-            <button class="btn btn-icon btn-link btn-sm" (click)="deleteRecipe.emit(recipe)">
-                <clr-icon shape="trash" class="is-error"></clr-icon>
-            </button>
-        </clr-dg-cell>
-        <ng-container ngProjectAs="clr-dg-row-detail" *ngIf="recipe.note">
-            <clr-dg-row-detail *clrIfExpanded>
-                {{ recipe.note }}
-            </clr-dg-row-detail>
+<nz-table
+    #recipeTable
+    nzSize="middle"
+    [nzData]="recipes"
+    [nzLoading]="loading"
+    nzSize="small"
+    [nzScroll]="{ x: true, y: null }"
+>
+    <thead>
+        <tr>
+            <th nzWidth="1.875rem"></th>
+            <th
+                [nzSortOrder]="'ascend'"
+                [nzSortFn]="sortByName"
+                nzWidth="25rem"
+                [nzSortDirections]="['ascend', 'descend']"
+            >
+                Name
+            </th>
+            <th [nzSortFn]="sortByLastPreparation" nzWidth="12.5rem">Letzte Zubereitung</th>
+            <th nzWidth="12.5rem" [nzFilters]="tags$ | async" [nzFilterFn]="filterByTags">Tags</th>
+            <th nzWidth="5.625rem"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let recipe of recipeTable.data">
+            <tr>
+                <td
+                    *ngIf="recipe.note"
+                    [nzExpand]="expandSet.has(recipe._id)"
+                    (nzExpandChange)="onExpandChange(recipe._id, $event)"
+                ></td>
+                <td *ngIf="!recipe.note">&nbsp;</td>
+                <td>
+                    <a *ngIf="recipe.url" href="{{ recipe.url }}" target="_blank">
+                        {{ recipe.name }}
+                    </a>
+                    <span *ngIf="!recipe.url">{{ recipe.name }}</span>
+                </td>
+                <td>{{ recipe.lastPreparation | date }}</td>
+                <td>
+                    <nz-tag *ngFor="let tag of recipe.tags">{{ tag }}</nz-tag>
+                </td>
+                <td>
+                    <button nz-button nzType="text" (click)="editRecipe.emit(recipe)">
+                        <i nz-icon nzType="edit" nzTheme="twotone" nzTwotoneColor="#0072a3"></i>
+                    </button>
+                    <button nz-button nzType="text" (click)="deleteRecipe.emit(recipe)">
+                        <i nz-icon nzType="delete" [nzTheme]="'twotone'" [nzTwotoneColor]="'#f00'"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(recipe._id)">
+                <span>{{ recipe.note }}</span>
+            </tr>
         </ng-container>
-    </clr-dg-row>
-
-    <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="10">
-            <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Rezepte pro Seite</clr-dg-page-size>
-            {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} von {{ pagination.totalItems }} Rezepten
-        </clr-dg-pagination></clr-dg-footer
-    >
-</clr-datagrid>
+    </tbody>
+</nz-table>

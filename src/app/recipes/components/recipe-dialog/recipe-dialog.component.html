@@ -1,38 +1,58 @@
-<clr-modal [(clrModalOpen)]="isOpen">
-    <h3 class="modal-title">{{ isNew ? 'Neues Rezept' : 'Rezept bearbeiten' }}</h3>
-    <div class="modal-body">
-        <form clrForm [formGroup]="form" class="full-width-form">
-            <clr-input-container>
-                <label>Name *</label>
-                <input clrInput formControlName="name" />
-                <clr-control-error>Pflichtfeld</clr-control-error>
-            </clr-input-container>
-            <clr-input-container>
-                <label>URL</label>
-                <input clrInput formControlName="url" />
-            </clr-input-container>
-            <clr-input-container>
-                <label>Tags</label>
-                <ng-select
-                    clrInput
-                    formControlName="tags"
-                    addTagText="Neues Tag hinzufügen"
-                    appendTo="body"
-                    [items]="tags$ | async"
-                    [multiple]="true"
-                    [addTag]="onAddTag"
-                ></ng-select>
-            </clr-input-container>
-            <clr-textarea-container>
-                <label>Notizen</label>
-                <textarea clrTextarea formControlName="note"></textarea>
-            </clr-textarea-container>
+<nz-modal
+    [(nzVisible)]="isOpen"
+    [nzTitle]="modalTitle"
+    [nzContent]="modalContent"
+    [nzFooter]="modalFooter"
+    (nzOnCancel)="isOpen = false"
+>
+    <ng-template #modalTitle>
+        {{ isNew ? 'Neues Rezept' : 'Rezept bearbeiten' }}
+    </ng-template>
+
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="form" nzLayout="vertical">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="name" nzRequired>
+                    Name
+                </nz-form-label>
+                <nz-form-control [nzSpan]="18" nzErrorTip="Pflichtfeld">
+                    <input nz-input name="name" id="name" formControlName="name" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="url">
+                    URL
+                </nz-form-label>
+                <nz-form-control [nzSpan]="18">
+                    <input nz-input name="url" id="url" formControlName="url" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="tags">
+                    Tags
+                </nz-form-label>
+                <nz-form-control [nzSpan]="18">
+                    <nz-select nzId="tags" nzMode="tags" formControlName="tags">
+                        <nz-option *ngFor="let item of tags$ | async" [nzLabel]="item" [nzValue]="item"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzFor="note">
+                    Notizen
+                </nz-form-label>
+                <nz-form-control [nzSpan]="18">
+                    <textarea rows="4" nz-input name="note" id="note" formControlName="note"></textarea>
+                </nz-form-control>
+            </nz-form-item>
         </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline" (click)="isOpen = false">Abbrechen</button>
-        <button type="button" class="btn btn-primary" (click)="onSubmit()" [clrLoading]="submitState">
+    </ng-template>
+    <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="isOpen = false">
+            Abbrechen
+        </button>
+        <button nz-button nzType="primary" (click)="onSubmit()" [nzLoading]="loading">
             {{ isNew ? 'Erstellen' : 'Aktualisieren' }}
         </button>
-    </div>
-</clr-modal>
+    </ng-template>
+</nz-modal>

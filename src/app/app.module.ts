@@ -6,7 +6,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApolloLink, InMemoryCache } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
-import { ClarityModule } from '@clr/angular';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -20,6 +19,12 @@ import { CoreModule } from './core/core.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthState } from './shared/state/auth';
 import { RecipeState } from './shared/state/recipe/recipe.state';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { de_DE } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import de from '@angular/common/locales/de';
+
+registerLocaleData(de);
 
 const uri = 'https://graphql.fauna.com/graphql';
 
@@ -65,7 +70,6 @@ const provideApolloFn = (httpLink: HttpLink) => {
         BrowserModule,
         HttpClientModule,
         APP_ROUTES,
-        ClarityModule,
         BrowserAnimationsModule,
         CoreModule,
         NgxsModule.forRoot([AuthState, RecipeState], {
@@ -86,6 +90,7 @@ const provideApolloFn = (httpLink: HttpLink) => {
             useFactory: provideApolloFn,
             deps: [HttpLink],
         },
+        { provide: NZ_I18N, useValue: de_DE },
     ],
 })
 export class AppModule {}

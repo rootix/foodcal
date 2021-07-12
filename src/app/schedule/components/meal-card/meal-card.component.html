@@ -1,29 +1,39 @@
-<div class="card" [class.empty]="isNew">
+<nz-card [class.empty]="isNew" [nzActions]="isNew ? [add] : [edit, delete]">
     <div class="card-block">
         <span class="card-tag">{{ meal.type === 0 ? 'Mittag' : 'Abend' }}</span>
         <h3 class="card-title">
             <span *ngIf="!meal.recipe">Kein Menü definiert</span>
-            <a *ngIf="meal.recipe?.url" href="{{ meal.recipe.url }}" target="_blank">{{ meal.recipe.name }}</a>
+            <a *ngIf="meal.recipe?.url" href="{{ meal.recipe.url }}" target="_blank">
+                {{ meal.recipe.name }}
+            </a>
             <span *ngIf="meal.recipe && !meal.recipe.url">{{ meal.recipe.name }}</span>
         </h3>
         <p class="card-text" *ngIf="meal.notes">
             {{ meal.notes }}
         </p>
     </div>
-    <div class="card-footer">
-        <button class="btn btn-icon" *ngIf="isNew" (click)="createMeal.emit(meal)">
-            <clr-icon shape="plus" title="Menu hinzufügen"></clr-icon>
-        </button>
-        <button class="btn btn-icon" *ngIf="!isNew" title="Menu bearbeiten" (click)="editMeal.emit(meal)">
-            <clr-icon shape="pencil"></clr-icon>
-        </button>
-        <button
-            class="btn btn-icon btn-danger-outline"
-            *ngIf="!isNew"
+
+    <ng-template #add>
+        <i nz-icon nzType="plus" title="Menu hinzufügen" (click)="createMeal.emit(meal)"></i>
+    </ng-template>
+    <ng-template #edit>
+        <i
+            nz-icon
+            nzType="edit"
+            nzTheme="twotone"
+            nzTwotoneColor="#0072a3"
+            title="Menu bearbeiten"
+            (click)="editMeal.emit(meal)"
+        ></i>
+    </ng-template>
+    <ng-template #delete>
+        <i
+            nz-icon
+            nzType="delete"
+            nzTheme="twotone"
+            nzTwotoneColor="#f00"
             title="Menu löschen"
             (click)="deleteMeal.emit(meal)"
-        >
-            <clr-icon shape="trash" class="is-error"></clr-icon>
-        </button>
-    </div>
-</div>
+        ></i>
+    </ng-template>
+</nz-card>

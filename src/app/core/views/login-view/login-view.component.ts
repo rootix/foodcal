@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClrForm, ClrLoadingState } from '@clr/angular';
 import { Store } from '@ngxs/store';
 import { Login } from 'src/app/shared/state/auth';
 
@@ -11,8 +10,7 @@ import { Login } from 'src/app/shared/state/auth';
     styleUrls: ['./login-view.component.scss'],
 })
 export class LoginViewComponent {
-    @ViewChild(ClrForm) clarityForm: ClrForm;
-    loginLoadingState: ClrLoadingState;
+    loading: boolean;
     loginFailed: boolean;
 
     readonly form = new FormGroup({
@@ -23,17 +21,23 @@ export class LoginViewComponent {
     constructor(private store: Store, private router: Router) {}
 
     onLogin() {
+        for (const i in this.form.controls) {
+            if (this.form.controls.hasOwnProperty(i)) {
+                this.form.controls[i].markAsDirty();
+                this.form.controls[i].updateValueAndValidity();
+            }
+        }
+
         if (this.form.invalid) {
-            this.clarityForm.markAsTouched();
             return;
         }
 
-        this.loginLoadingState = ClrLoadingState.LOADING;
+        this.loading = true;
         const { username, password } = this.form.value;
         this.store.dispatch(new Login(username, password)).subscribe(
             _ => this.router.navigate(['/schedule']),
             _ => {
-                this.loginLoadingState = ClrLoadingState.ERROR;
+                this.loading = false;
                 this.loginFailed = true;
             }
         );

@@ -1,6 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ClrForm, ClrLoadingState } from '@clr/angular';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -12,8 +11,6 @@ import { RecipeState } from 'src/app/shared/state/recipe';
     templateUrl: './recipe-dialog.component.html',
 })
 export class RecipeDialogComponent {
-    @ViewChild(ClrForm) clarityForm: ClrForm;
-
     @Select(RecipeState.getTags) tags$: Observable<string[]>;
 
     isOpen = false;
@@ -27,7 +24,7 @@ export class RecipeDialogComponent {
         note: new FormControl(),
     });
 
-    submitState: ClrLoadingState;
+    loading: boolean;
     private submitHandler: (recipe: Recipe) => Observable<void>;
 
     open(recipe: Recipe, submitHandler: (recipe: Recipe) => Observable<void>) {
@@ -42,20 +39,21 @@ export class RecipeDialogComponent {
         this.isOpen = true;
     }
 
-    onAddTag(tag: string) {
-        return tag;
-    }
-
     onSubmit() {
+        for (const i in this.form.controls) {
+            if (this.form.controls.hasOwnProperty(i)) {
+                this.form.controls[i].markAsDirty();
+                this.form.controls[i].updateValueAndValidity();
+            }
+        }
+
         if (this.form.invalid) {
-            console.log(this.form.value);
-            this.clarityForm.markAsTouched();
             return;
         }
 
-        this.submitState = ClrLoadingState.LOADING;
+        this.loading = true;
         this.submitHandler({ ...this.form.value })
-            .pipe(finalize(() => (this.submitState = ClrLoadingState.DEFAULT)))
+            .pipe(finalize(() => (this.loading = false)))
             .subscribe(_ => {
                 this.isOpen = false;
             });

@@ -23,17 +23,19 @@
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.app.json",
                         "aot": true,
-                        "assets": ["src/favicon.ico", "src/assets", "src/_redirects"],
-                        "styles": ["node_modules/@clr/icons/clr-icons.min.css", "src/styles/main.scss"],
-                        "scripts": [
-                            "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js",
-                            "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
-                            "node_modules/@clr/icons/clr-icons.min.js"
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets",
+                            "src/_redirects",
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                                "output": "/assets/"
+                            }
                         ],
-                        "allowedCommonJsDependencies": [
-                            "graphql-tag",
-                            "zen-observable"
-                        ]
+                        "styles": ["src/styles/main.less"],
+                        "scripts": [],
+                        "allowedCommonJsDependencies": ["graphql-tag", "zen-observable"]
                     },
                     "configurations": {
                         "production": {
@@ -91,7 +93,7 @@
                         "tsConfig": "tsconfig.spec.json",
                         "karmaConfig": "karma.conf.js",
                         "assets": ["src/favicon.ico", "src/assets"],
-                        "styles": ["src/styles.scss"],
+                        "styles": [],
                         "scripts": []
                     }
                 },
